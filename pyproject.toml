@@ -4,10 +4,16 @@ version = "0.1.0"
 description = "Moonlight Benchmarks for the ARCH-COMP FALS competition"
 authors = ["Ennio Visconti <ennio.visconti@gmail.com>"]
 readme = "README.md"
+packages = [{include = "arch_comp_moonlight"}]
 
 [tool.poetry.dependencies]
 python = "^3.11"
 
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.2.0"
+pytest-mock = "^3.14.0"
+pytest-watch = "^4.2.0"
 
 [build-system]
 requires = ["poetry-core"]
