@@ -1,12 +1,15 @@
+from abc import ABC, abstractmethod
 from typing import Callable, Any, Union
 
 import os
 
-class Optimizer:
+
+class Optimizer(ABC):
     def __init__(self, filename: str) -> None:
         self.filename = filename
         pass
 
+    @abstractmethod
     def optimize(self, simulator: Callable[[dict[str, float]], Any]) -> Union[dict, None]:
         """Runs an instance of the monitor on a trace."""
         pass
