@@ -4,10 +4,13 @@ version = "0.1.0"
 description = "Moonlight Benchmarks for the ARCH-COMP FALS competition"
 authors = ["Ennio Visconti <ennio.visconti@gmail.com>"]
 readme = "README.md"
-packages = [{include = "arch_comp_moonlight"}]
+packages = [{ include = "arch_comp_moonlight" }]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = ">=3.11,<3.12"
+matlabengine = "^24.1.2"
+numpy = "^1.26.4"
+moonlight = "^0.3.1"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -31,7 +31,6 @@ class Runner(ABC):
         )
 
         params = self.config.other_params
-
         nested_loops_from_dict_of_lists(params, self.optimizer_run)
 
     @abstractmethod

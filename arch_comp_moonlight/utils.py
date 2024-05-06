@@ -30,3 +30,12 @@ def nested_loops_from_dict_of_lists(param_dict: dict[str, list[Any]],
         combo_dict = dict(zip(keys, combination))
         logger.info(f"Experiment parameters: {combo_dict} ##################")
         action(combo_dict)
+
+
+def unpack(params: dict) -> str:
+    """
+    Iterate over params keys and concatenate to a string
+    the values of the dictionary
+    e.g. {'u1': 1, 'u2': 2, 'u3': 2} -> '[1; 2; 2]'
+    """
+    return f"[ {'; '.join([str(params[key]) for key in params.keys()])} ]"

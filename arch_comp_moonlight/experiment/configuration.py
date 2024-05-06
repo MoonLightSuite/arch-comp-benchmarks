@@ -15,12 +15,14 @@ class Configuration:
     -   random_samples: the number of random samples to take
     -   optimization_iterations: the number of optimization iterations before stopping
     -   other_params: a dictionary with the parameters to optimize
-    -   optimizer: a function that configures an optimizer ready to run
+    -   formula_name: the name of the formula to monitor
+    -   simulator_repetitions: the number of repetitions for each simulation
     """
     exp_name: str
     exp_batch_name: str
     random_samples: int
     optimization_iterations: int
     other_params: dict[str, list[Any]]
-    optimizer: Callable[[dict[str, Any]], Optimizer]
+    formula_name: str
+    simulator_repetitions: int = 1
     exp_repetitions: int = 1
