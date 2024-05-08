@@ -7,7 +7,7 @@ readme = "README.md"
 packages = [{ include = "arch_comp_moonlight" }]
 
 [tool.poetry.dependencies]
-python = ">=3.11,<3.12"
+python = "~3.11"
 matlabengine = "^24.1.2"
 numpy = "^1.26.4"
 moonlight = "^0.3.1"
