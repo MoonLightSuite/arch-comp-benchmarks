@@ -22,7 +22,7 @@ class Configuration:
     exp_batch_name: str
     random_samples: int
     optimization_iterations: int
-    other_params: dict[str, list[Any]]
+    hyper_params: dict[str, list[Any]]
     formula_name: str
     simulator_repetitions: int = 1
     exp_repetitions: int = 1

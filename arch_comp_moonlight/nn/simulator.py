@@ -12,7 +12,7 @@ logger = getLogger(__name__)
 dir = os.path.dirname(os.path.realpath(__file__))
 
 SimulationParams = TypedDict(
-    'SimulationParams', {'length': int, 'input': list[float]}
+    'SimulationParams', {'length': int, 'inputs': list[float]}
 )
 
 
@@ -38,23 +38,21 @@ class NNSimulator(Simulator):
         self.matlab.eval("beta = 0.03;")
         self.matlab.eval("T = 40;")
 
-    def pass_input(self, params: dict) -> None:
-        # self.matlab.eval("t__ = linspace(0, 40, 10)';", nargout=0)
+    def pass_input(self, params: SimulationParams) -> None:
         length = params.pop('length')
-        PARAMS = {'u1': 1.7371798557979203,
-                  'u2': 2.0007661359736426, 'u3': 1.8324732072952215}
+
+        inputs = {}
+        for (key, value) in enumerate(params['inputs']):
+            inputs["u" + str(key + 1)] = value
 
         logger.info(f"Length: {length}")
         self.matlab.eval(f"t__ = linspace(0, 40, {length})';")
-        self.matlab.eval(f"u__ = {unpack(PARAMS)};")
+        self.matlab.eval(f"u__ = {unpack(inputs)};")
         self.matlab.eval("u = [t__, u__];")
 
-        # t = self.matlab.eval("u;", nargout=1)
-        # print(t)
-
     def prepare_output(self) -> dict:
-        yout = self.matlab.eval("yout;", 1)  # type: ignore
-        tout = self.matlab.eval("tout;", 1)  # type: ignore
+        yout = self.matlab.eval("yout;", 1)
+        tout = self.matlab.eval("tout;", 1)
 
         times = np.asarray(tout).transpose().tolist()[0]
         error = np.asarray(yout).transpose().tolist()[0]

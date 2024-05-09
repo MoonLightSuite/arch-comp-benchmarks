@@ -1,8 +1,8 @@
 from os import path
 from logging import getLogger
-from typing import Any, Callable
+from typing import Any, Callable, TypedDict
 
-from .simulator import NNSimulator
+from .simulator import NNSimulator, SimulationParams
 from ..nn.monitor import NNMonitor, Trace
 from ..baseline.optimizer import Optimizer
 from ..experiment.configuration import Configuration
@@ -27,6 +27,8 @@ nn_config = Configuration(
     simulator_repetitions=1
 )
 
+Iteration = TypedDict('Iteration', {'n': int, 'params': SimulationParams})
+
 
 class NNRunner(Runner):
     def __init__(self, config: Configuration):
@@ -36,22 +38,16 @@ class NNRunner(Runner):
         self.monitor = NNMonitor()
         self.optimizer = DumbOptimizer({})
 
-    def single_run(self, params: dict[str, Any]) -> float:
+    def single_run(self, params: SimulationParams) -> float:
         trace: Trace = self.simulator.run(params)
-
         robustness = self.monitor.run(trace, self.config.formula_name)
         value = robustness.transpose()[1][0]
         return value
 
-    def optimizer_run(self, iter_params) -> None:
-        self.optimizer.optimize(iter_params, self.single_run)
-        # n = iter_params['n']
-        # i = iter_params['input_size']
-        # a = iter_params['alpha']
-        # b = iter_params['beta']
-        # print(f"Repetition n.: {n}")
-        # opt = self.config.optimizer({**vars(self.config), **iter_params})
-        # opt.optimize(self.single_run({}))
+    def optimizer_run(self, iteration: Iteration) -> None:
+        logger.info(f"Repetition n.: {iteration['n']}")
+        value = self.optimizer.optimize(iteration["params"], self.single_run)
+        return value
 
 
 class DumbOptimizer(Optimizer):
@@ -61,4 +57,4 @@ class DumbOptimizer(Optimizer):
     def optimize(self, params: Any,
                  single_run: Callable[[dict], float]) -> None:
         logger.info("Optimizer RUN")
-        single_run(params)
+        return single_run(params)

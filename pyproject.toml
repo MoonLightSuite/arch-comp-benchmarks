@@ -11,6 +11,7 @@ python = "~3.11"
 matlabengine = "^24.1.2"
 numpy = "^1.26.4"
 moonlight = "^0.3.1"
+uber-turbo = "0.1.2"
 
 
 [tool.poetry.group.dev.dependencies]
