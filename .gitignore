@@ -232,3 +232,8 @@ fabric.properties
 
 # Mac
 .DS_Store
+
+# Exclude matlab temporary files
+*.asv
+slprj/
+*.slxc

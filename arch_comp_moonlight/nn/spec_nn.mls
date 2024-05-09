@@ -1,0 +1,10 @@
+signal { real y_1; real y_2; }
+domain minmax;
+
+/* Auxiliary formulae */
+formula f1 = y_1 > 0;
+formula f2 = globally [0, 1] ! f1;
+formula f3 = eventually [0, 2] f2;
+
+/* Final formula */
+formula nn = globally [1, 37] ( f1 -> f3 );

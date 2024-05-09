@@ -1,0 +1,11 @@
+signal { real y_1; real y_2; }
+domain minmax;
+
+/* Auxiliary formulae */
+formula f1 = eventually [0, 1] ( y_2 > 3.2 );
+formula f21 = globally [0, 0.5] ((1.75 < y_2) & (y_2 < 2.25 ));
+formula f2 = eventually [1, 1.5] f21;
+formula f3 = globally [2, 3] ( (1.825 < y_2) & (y_2 < 2.175) );
+
+/* Final formulae */
+formula nnx = f1 & ( f2 & f3 );

@@ -1,18 +1,18 @@
-import os
-import logging
+from os import path
+from logging import getLogger
 from typing import Any, Callable
 
 from .simulator import NNSimulator
-from ..nn.monitor import NNMonitor
+from ..nn.monitor import NNMonitor, Trace
 from ..baseline.optimizer import Optimizer
 from ..experiment.configuration import Configuration
 from ..experiment.runner import Runner
 
-dir = os.path.dirname(os.path.realpath(__file__))
+dir = path.dirname(path.realpath(__file__))
 
 EXP_DIR = f"{dir}/../../benchmarks/NN - Magnet"
 
-logger = logging.getLogger(__name__)
+logger = getLogger(__name__)
 
 
 nn_config = Configuration(
@@ -23,7 +23,7 @@ nn_config = Configuration(
     other_params={
         'i': [1]
     },
-    formula_name="NN",
+    formula_name="nnx",
     simulator_repetitions=1
 )
 
@@ -37,9 +37,14 @@ class NNRunner(Runner):
         self.optimizer = DumbOptimizer({})
 
     def single_run(self, params: dict[str, Any]) -> float:
-        trace = self.simulator.run(params)
+        trace: Trace = self.simulator.run(params)
+        logger.info(f"Trace: {trace.keys()}")
+
+        logger.info(f"Times: {len(trace['times'])}")
+        logger.info(f"Values: {len(trace['values'])}")
         robustness = self.monitor.run(trace, self.config.formula_name)
-        return robustness
+        value = robustness.transpose()[1][0]
+        return value
 
     def optimizer_run(self, iter_params) -> None:
         self.optimizer.optimize(iter_params, self.single_run)
