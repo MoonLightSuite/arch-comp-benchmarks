@@ -26,10 +26,6 @@ class NNSimulator(Simulator):
 
         self.matlab.eval("[tout, yout, xin] = run_neural(u, T);")
 
-        # self.matlab.exec("test_neural")   # type: ignore
-
-        # self.reset_engine()
-
         return self.prepare_output()
 
     def init(self) -> None:
