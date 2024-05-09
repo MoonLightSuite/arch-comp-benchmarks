@@ -38,10 +38,7 @@ class NNRunner(Runner):
 
     def single_run(self, params: dict[str, Any]) -> float:
         trace: Trace = self.simulator.run(params)
-        logger.info(f"Trace: {trace.keys()}")
 
-        logger.info(f"Times: {len(trace['times'])}")
-        logger.info(f"Values: {len(trace['values'])}")
         robustness = self.monitor.run(trace, self.config.formula_name)
         value = robustness.transpose()[1][0]
         return value

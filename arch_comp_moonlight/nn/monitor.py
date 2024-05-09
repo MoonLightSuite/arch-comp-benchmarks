@@ -15,14 +15,9 @@ Trace = TypedDict('Trace', {'times': list[float], 'values': list[float]})
 class NNMonitor(Monitor):
     def run(self, trace: Trace, formula: str) -> np.ndarray[float]:
         dir = path.dirname(path.realpath(__file__))
-        moonlightScript = ScriptLoader.loadFromFile(
-            f"{dir}/spec_{formula}.mls")
-        monitor = moonlightScript.getMonitor(formula)
+        moonlightScript = ScriptLoader.loadFromFile(f"{dir}/spec_{formula}.mls")
 
-        logger.info(f"Trace: ${trace.keys()}")
-        logger.info(f"Times: {len(trace['times'])}")
-        logger.info(f"Values: {len(trace['values'])}")
-        logger.info(f"Values[0]: {len(trace['values'][0])}")
+        monitor = moonlightScript.getMonitor(formula)
 
         res = monitor.monitor(trace['times'], trace['values'])
 
