@@ -23,7 +23,8 @@ class Configuration:
     optimization_iterations: int
     optimization_lower_bounds: float
     optimization_upper_bounds: float
-    hyper_params: dict[str, list[Any]]
-    formula_name: str
+    monitor_spec: str
+    monitor_formula_name: str
+    simulator_hyper_params: dict[str, list[Any]]
     simulator_repetitions: int = 1
     exp_repetitions: int = 1

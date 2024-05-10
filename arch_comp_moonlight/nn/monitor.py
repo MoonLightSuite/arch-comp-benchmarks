@@ -13,13 +13,14 @@ logger = getLogger(__name__)
 
 
 class NNMonitor(Monitor[TraceValue]):
-    def run(self, trace: Trace[TraceValue], formula: str) -> NDArray[np.float64]:
+    def __init__(self, spec: str) -> None:
+        super().__init__()
         dir = path.dirname(path.realpath(__file__))
-        moonlightScript = ScriptLoader.loadFromFile(  # type: ignore
-            f"{dir}/spec_{formula}.mls")  # type: ignore
-
-        monitor = moonlightScript.getMonitor(formula)  # type: ignore
-
+        file = f"{dir}/{spec}"
+        self.moonlight = ScriptLoader.loadFromFile(file)  # type: ignore
+    
+    def run(self, trace: Trace[TraceValue], formula: str) \
+        -> NDArray[np.float64]:
+        monitor = self.moonlight.getMonitor(formula)  # type: ignore
         res = monitor.monitor(trace['times'], trace['values'])  # type: ignore
-
         return np.array(res)  # type: ignore

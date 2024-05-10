@@ -7,7 +7,7 @@ from ..nn.monitor import NNMonitor
 from ..experiment.trace import Trace
 from ..experiment.configuration import Configuration
 from ..experiment.runner import Runner
-from ..optimizer.turbo import Turbo
+from ..optimizers.turbo import Turbo
 import numpy as np
 
 dir = path.dirname(path.realpath(__file__))
@@ -21,12 +21,13 @@ nn_config = Configuration(
     exp_name="NN",
     exp_batch_name="TURBO",
     optimization_iterations=7,
-    hyper_params={
+    simulator_hyper_params={
         'i': [5],
     },
     simulator_repetitions=1,
     # Experiment-specific
-    formula_name="nn",
+    monitor_spec="spec_nn.mls",
+    monitor_formula_name="nn",
     optimization_lower_bounds=0.0,
     optimization_upper_bounds=1.0,
 )
@@ -40,18 +41,18 @@ class NNRunner(Runner[Params]):
         super().__init__(config)
         logger.debug(config)
         self.simulator = NNSimulator(model_path=EXP_DIR)
-        self.monitor = NNMonitor()
+        self.monitor = NNMonitor(spec=config.monitor_spec)
 
     def single_run(self, params: dict[str, np.float64]) -> np.float64:
         logger.info(f"Running simulator with params: {params}")
         trace: Trace[TraceValue] = self.simulator.run(params)
         logger.info
-        robustness = self.monitor.run(trace, self.config.formula_name)
+        robustness = self.monitor.run(trace, self.config.monitor_formula_name)
         value = robustness.transpose()[1][0]
         logger.info(f"Robustness: {value}")
         return value
 
-    def optimizer_run(self, iteration: Iteration[Params]) -> None:
+    def prepare_optimizer(self, iteration: Iteration[Params]) -> None:
         logger.info(f"Repetition n.: {iteration['n']}")
         length = iteration["params"]["length"]
         lower_bounds = self.config.optimization_lower_bounds * np.ones(length)
@@ -62,5 +63,3 @@ class NNRunner(Runner[Params]):
             lower_bounds=lower_bounds,
             upper_bounds=upper_bounds
         )
-        value = self.optimizer.optimize(self.single_run)
-        return value

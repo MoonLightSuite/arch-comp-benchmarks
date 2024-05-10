@@ -1,33 +1,49 @@
-from typing import Any, Callable
+from enum import Enum, auto
 import os
+from logging import getLogger
+
+
+class LineKey(Enum):
+    system = auto()
+    property = auto()
+    simulations = auto()
+    time = auto()
+    robustness = auto()
+    falsified = auto()
+    input = auto()
+
+
+Line = dict[LineKey, str]
+
+logger = getLogger(__name__)
 
 
 class Store:
-    header = """\
-"system","property","simulations","time","robustness","falsified","input"\
-"""
-
     def __init__(self, filename: str):
         if not os.path.isfile(filename):
             with open(filename, 'w') as f:
-                f.write(self.header + '\n')
+                f.write(self._print_header() + '\n')
         self.filename = filename
+        self.last_line: Line | None = None
 
-    def do_store(self, store: Callable[[str, str], None], params: dict[str, Any], robustness: float) -> None:
-        input_params_str = ','.join([str(v) for v in params.values()])
-        data_line = f"{input_params_str},{robustness},-1"
-        ln = range(1, len(params) + 1)
-        header_line = ','.join(
-            [f'u{str(j)}' for j in ln]) + ',value,Timestamp'
-        store(header_line, data_line)
+    def _print_line(self, line: Line) -> str:
+        return f'"{line[LineKey.system]}","{line[LineKey.property]}","{line[LineKey.simulations]}","{line[LineKey.time]}","{line[LineKey.robustness]}","{line[LineKey.falsified]}","{line[LineKey.input]}"'
 
-    def store(self, header: str, line: str) -> None:
+    def _print_header(self) -> str:
+        header = list(LineKey.__members__.keys())
+        return '"' + '","'.join(header) + '"'
+
+    def store(self, key: LineKey, value: str) -> None:
         """Stores the data of the optimization."""
-        print(f"Printing to file: {self.filename}")
+        if (self.last_line is None):
+            self.last_line = {}
+        self.last_line[key] = value
 
-        if not os.path.isfile(self.filename):
-            with open(self.filename, 'w') as f:
-                f.write(header + '\n')
-
-        with open(self.filename, 'a') as f:
-            f.write(line + '\n')
+    def save(self) -> None:
+        """Saves the data to the file."""
+        print(f"Saving to file: {self.filename}")
+        if (self.last_line is not None):
+            with open(self.filename, 'a') as f:
+                f.write(self._print_line(self.last_line) + '\n')
+        else:
+            logger.warning("No data to save.")
