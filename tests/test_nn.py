@@ -1,5 +1,4 @@
 from arch_comp_moonlight.nn.runner import NNRunner, Params, nn_config, Iteration
-import warnings
 
 
 def test_nn():

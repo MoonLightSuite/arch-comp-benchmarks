@@ -1,10 +1,7 @@
 from os import path
 from logging import getLogger
 from typing import TypedDict
-
 from ..experiment.iteration import Iteration
-
-
 from .simulator import NNSimulator, TraceValue
 from ..nn.monitor import NNMonitor
 from ..experiment.trace import Trace
@@ -12,7 +9,6 @@ from ..experiment.configuration import Configuration
 from ..experiment.runner import Runner
 from ..optimizer.turbo import Turbo
 import numpy as np
-import warnings
 
 dir = path.dirname(path.realpath(__file__))
 
