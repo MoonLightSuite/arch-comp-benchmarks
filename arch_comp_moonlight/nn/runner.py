@@ -1,6 +1,8 @@
 from os import path
 from logging import getLogger
-from typing import Generic, TypeVar, TypedDict
+from typing import TypedDict
+
+from ..experiment.iteration import Iteration
 
 
 from .simulator import NNSimulator
@@ -35,10 +37,7 @@ nn_config = Configuration(
 
 Params = TypedDict('Params', {'length': int})
 
-T = TypeVar("T")
-class Iteration(TypedDict, Generic[T]):
-    n: int
-    params: T
+
 
 
 class NNRunner(Runner):
