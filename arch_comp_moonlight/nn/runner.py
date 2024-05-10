@@ -5,13 +5,14 @@ from typing import TypedDict
 from ..experiment.iteration import Iteration
 
 
-from .simulator import NNSimulator
-from ..nn.monitor import NNMonitor, Trace
-from ..baseline.optimizer import Optimizer
+from .simulator import NNSimulator, TraceValue
+from ..nn.monitor import NNMonitor
+from ..experiment.trace import Trace
 from ..experiment.configuration import Configuration
 from ..experiment.runner import Runner
 from ..optimizer.turbo import Turbo
 import numpy as np
+import warnings
 
 dir = path.dirname(path.realpath(__file__))
 
@@ -25,7 +26,7 @@ nn_config = Configuration(
     exp_batch_name="TURBO",
     optimization_iterations=7,
     hyper_params={
-        'i': [3]
+        'i': [5],
     },
     simulator_repetitions=1,
     # Experiment-specific
@@ -37,6 +38,7 @@ nn_config = Configuration(
 
 Params = TypedDict('Params', {'length': int})
 
+
 class NNRunner(Runner[Params]):
     def __init__(self, config: Configuration):
         super().__init__(config)
@@ -46,7 +48,7 @@ class NNRunner(Runner[Params]):
 
     def single_run(self, params: dict[str, np.float64]) -> np.float64:
         logger.info(f"Running simulator with params: {params}")
-        trace: Trace = self.simulator.run(params)
+        trace: Trace[TraceValue] = self.simulator.run(params)
         logger.info
         robustness = self.monitor.run(trace, self.config.formula_name)
         value = robustness.transpose()[1][0]
@@ -58,6 +60,7 @@ class NNRunner(Runner[Params]):
         length = iteration["params"]["length"]
         lower_bounds = self.config.optimization_lower_bounds * np.ones(length)
         upper_bounds = self.config.optimization_upper_bounds * np.ones(length)
+
         self.optimizer = Turbo(
             optimization_iters=self.config.optimization_iterations,
             lower_bounds=lower_bounds,

@@ -1,11 +1,17 @@
 
-from typing import Callable
+
 from ..baseline.optimizer import Optimizer
-from turbo import Turbo1
+from typing import Callable
 import numpy as np
 from numpy.typing import NDArray
 from logging import getLogger
 
+# autopep8: off
+import warnings
+
+
+from turbo import Turbo1  # type: ignore
+# autopep8: on
 logger = getLogger(__name__)
 
 
@@ -22,6 +28,9 @@ class Turbo(Optimizer):
         SAMPLES = 2 * INPUT_DIMENSIONS
         PYTORCH_BATCH_SIZE = 1
 
+        self.turbo: Callable[
+            [Callable[[NDArray[np.float64]], np.float64]],
+            Turbo1]
         self.turbo = lambda f: Turbo1(
             f=f,  # Handle to objective function
             lb=lower_bounds,  # Numpy array specifying lower bounds
@@ -40,11 +49,17 @@ class Turbo(Optimizer):
 
     def optimize(self, simulator:
                  Callable[[dict[str, np.float64]], np.float64]) -> None:
-        opt = self.turbo(lambda params: simulator(
-            self.__array_to_dict(params)))
-        opt.optimize()
+        self.simulator = simulator
+        opt = self.turbo(self._simulation)
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", category=UserWarning)
+            warnings.simplefilter("ignore", category=DeprecationWarning)
+            opt.optimize()
 
-    def __array_to_dict(self, raw_params: NDArray) -> dict[str, np.float64]:
+    def _simulation(self, params: NDArray[np.float64]) -> np.float64:
+        return self.simulator(self.__array_to_dict(params))
+
+    def __array_to_dict(self, raw_params: NDArray[np.float64]) -> dict[str, np.float64]:
         params = {f"u{i+1}": raw_params[i] for i in range(len(raw_params))}
         return params
 
@@ -61,5 +76,5 @@ def _check_bounds(lower_bounds: NDArray[np.float64],
         raise Exception("Lower and upper bounds must be 1-dimensional")
 
     if (lower_bounds.dtype != np.float64
-       or upper_bounds.dtype != np.float64):
+            or upper_bounds.dtype != np.float64):
         raise Exception("Lower and upper bounds must be of type float64")

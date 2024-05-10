@@ -32,7 +32,7 @@ def nested_loops_from_dict_of_lists(param_dict: Mapping[str, list[Any]],
         action(combo_dict)
 
 
-def unpack(params: dict) -> str:
+def unpack(params: dict[Any, Any]) -> str:
     """
     Iterate over params keys and concatenate to a string
     the values of the dictionary

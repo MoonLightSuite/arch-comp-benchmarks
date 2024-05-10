@@ -23,6 +23,7 @@ pytest-cov = "^5.0.0"
 
 [tool.pyright]
 enableTypeIgnoreComments = true
+strict = ["."]
 
 [build-system]
 requires = ["poetry-core"]

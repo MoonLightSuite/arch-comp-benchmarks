@@ -1,6 +1,5 @@
 from dataclasses import dataclass
-from typing import Callable, Any
-from ..baseline.optimizer import Optimizer
+from typing import Any
 
 
 @dataclass

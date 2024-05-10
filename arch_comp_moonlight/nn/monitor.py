@@ -1,6 +1,7 @@
 
-from typing import TypedDict
-from moonlight import ScriptLoader
+from ..nn.simulator import TraceValue
+from ..experiment.trace import Trace
+from moonlight import ScriptLoader  # type: ignore
 import numpy as np
 from logging import getLogger
 from os import path
@@ -10,22 +11,15 @@ from ..baseline.monitor import Monitor
 
 logger = getLogger(__name__)
 
-Trace = TypedDict(
-    'Trace', {
-        'times': list[float], 
-        'values': list[tuple[np.float64, np.float64]]
-    }
-)
 
-
-class NNMonitor(Monitor):
-    def run(self, trace: Trace, formula: str) -> NDArray[np.float64]:
+class NNMonitor(Monitor[TraceValue]):
+    def run(self, trace: Trace[TraceValue], formula: str) -> NDArray[np.float64]:
         dir = path.dirname(path.realpath(__file__))
-        moonlightScript = ScriptLoader.loadFromFile(
-            f"{dir}/spec_{formula}.mls")
+        moonlightScript = ScriptLoader.loadFromFile(  # type: ignore
+            f"{dir}/spec_{formula}.mls")  # type: ignore
 
-        monitor = moonlightScript.getMonitor(formula)
+        monitor = moonlightScript.getMonitor(formula)  # type: ignore
 
-        res = monitor.monitor(trace['times'], trace['values']) # type: ignore
+        res = monitor.monitor(trace['times'], trace['values'])  # type: ignore
 
-        return np.array(res)
+        return np.array(res)  # type: ignore

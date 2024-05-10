@@ -1,5 +1,5 @@
 
-from ..nn.monitor import Trace
+from ..experiment.trace import Trace
 from ..utils import unpack
 from ..matlab import Matlab
 from ..baseline.simulator import Simulator
@@ -11,13 +11,15 @@ logger = getLogger(__name__)
 
 dir = os.path.dirname(os.path.realpath(__file__))
 
+TraceValue = tuple[np.float64, np.float64]
 
-class NNSimulator(Simulator):
+
+class NNSimulator(Simulator[TraceValue]):
     def __init__(self, model_path: str) -> None:
         self.matlab = Matlab()
         self.matlab.eval(f"addpath('{model_path}');")
 
-    def run(self, params: dict[str, np.float64]) -> Trace:
+    def run(self, params: dict[str, np.float64]) -> Trace[TraceValue]:
         self.init()
         self.pass_input(params)
 
@@ -38,7 +40,7 @@ class NNSimulator(Simulator):
         self.matlab.eval(f"u__ = {unpack(params)};")
         self.matlab.eval("u = [t__, u__];")
 
-    def prepare_output(self) -> Trace:
+    def prepare_output(self) -> Trace[TraceValue]:
         yout = self.matlab.eval("yout;", outputs=1)
         tout = self.matlab.eval("tout;", outputs=1)
 
