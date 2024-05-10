@@ -2,7 +2,8 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 
-T   = TypeVar("T")
+T = TypeVar("T")
+
 
 class Simulator(ABC, Generic[T]):
     """
@@ -24,7 +25,7 @@ class Simulator(ABC, Generic[T]):
         pass
 
     @abstractmethod
-    def run(self, params: T) -> Trace:
+    def run(self, params: T) -> dict:
         """Runs an instance of the simulation."""
         raise NotImplementedError()
 
