@@ -27,9 +27,9 @@ class Runner(ABC):
     def run_batch(self) -> None:
         """Runs the experiment for all the parameters combinations."""
         last_iteration = self.config.exp_repetitions + 1
-        self.config.other_params['n'] = list(range(1, last_iteration))
+        self.config.hyper_params['n'] = list(range(1, last_iteration))
 
-        params = self.config.other_params
+        params = self.config.hyper_params
         nested_loops_from_dict_of_lists(params, self.optimizer_run)
 
     @abstractmethod

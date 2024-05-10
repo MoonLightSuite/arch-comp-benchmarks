@@ -1,8 +1,12 @@
 
+from typing import Callable
 from ..baseline.optimizer import Optimizer
 from turbo import Turbo1
 import numpy as np
 from numpy.typing import NDArray
+from logging import getLogger
+
+logger = getLogger(__name__)
 
 
 class Turbo(Optimizer):
@@ -34,17 +38,15 @@ class Turbo(Optimizer):
             dtype="float32",  # float64 or float32
         )  # type: ignore
 
-    def optimize(self, simulator) -> dict:
-        opt = self.turbo(self.actual_simulation(simulator))
+    def optimize(self, simulator:
+                 Callable[[dict[str, np.float64]], np.float64]) -> None:
+        opt = self.turbo(lambda params: simulator(
+            self.__array_to_dict(params)))
+        opt.optimize()
 
-        return opt.optimize()
-
-    def __array_to_dict(self, raw_params: NDArray) -> dict[str, float]:
+    def __array_to_dict(self, raw_params: NDArray) -> dict[str, np.float64]:
         params = {f"u{i+1}": raw_params[i] for i in range(len(raw_params))}
         return params
-
-    def actual_simulation(self, simulator):
-        return lambda params: simulator(self.__array_to_dict(params))
 
 
 def _check_bounds(lower_bounds: NDArray[np.float64],

@@ -5,8 +5,7 @@ import os
 
 
 class Optimizer(ABC):
-    def __init__(self, filename: str) -> None:
-        self.filename = filename
+    def __init__(self) -> None:
         pass
 
     @abstractmethod

@@ -1,12 +1,15 @@
 from os import path
 from logging import getLogger
-from typing import Any, Callable, TypedDict
+from typing import Generic, TypeVar, TypedDict
 
-from .simulator import NNSimulator, SimulationParams
+
+from .simulator import NNSimulator
 from ..nn.monitor import NNMonitor, Trace
 from ..baseline.optimizer import Optimizer
 from ..experiment.configuration import Configuration
 from ..experiment.runner import Runner
+from ..optimizer.turbo import Turbo
+import numpy as np
 
 dir = path.dirname(path.realpath(__file__))
 
@@ -18,16 +21,24 @@ logger = getLogger(__name__)
 nn_config = Configuration(
     exp_name="NN",
     exp_batch_name="TURBO",
-    random_samples=10,  # TODO: check the goal of this parameter
-    optimization_iterations=1,
-    other_params={
-        'i': [1]
+    optimization_iterations=7,
+    hyper_params={
+        'i': [3]
     },
-    formula_name="nnx",
-    simulator_repetitions=1
+    simulator_repetitions=1,
+    # Experiment-specific
+    formula_name="nn",
+    optimization_lower_bounds=0.0,
+    optimization_upper_bounds=1.0,
 )
 
-Iteration = TypedDict('Iteration', {'n': int, 'params': SimulationParams})
+
+Params = TypedDict('Params', {'length': int})
+
+T = TypeVar("T")
+class Iteration(TypedDict, Generic[T]):
+    n: int
+    params: T
 
 
 class NNRunner(Runner):
@@ -36,25 +47,25 @@ class NNRunner(Runner):
         logger.debug(config)
         self.simulator = NNSimulator(model_path=EXP_DIR)
         self.monitor = NNMonitor()
-        self.optimizer = DumbOptimizer({})
 
-    def single_run(self, params: SimulationParams) -> float:
+    def single_run(self, params: dict[str, np.float64]) -> np.float64:
+        logger.info(f"Running simulator with params: {params}")
         trace: Trace = self.simulator.run(params)
+        logger.info
         robustness = self.monitor.run(trace, self.config.formula_name)
         value = robustness.transpose()[1][0]
+        logger.info(f"Robustness: {value}")
         return value
 
-    def optimizer_run(self, iteration: Iteration) -> None:
+    def optimizer_run(self, iteration: Iteration[Params]) -> None:
         logger.info(f"Repetition n.: {iteration['n']}")
-        value = self.optimizer.optimize(iteration["params"], self.single_run)
+        length = iteration["params"]["length"]
+        lower_bounds = self.config.optimization_lower_bounds * np.ones(length)
+        upper_bounds = self.config.optimization_upper_bounds * np.ones(length)
+        self.optimizer = Turbo(
+            optimization_iters=self.config.optimization_iterations,
+            lower_bounds=lower_bounds,
+            upper_bounds=upper_bounds
+        )
+        value = self.optimizer.optimize(self.single_run)
         return value
-
-
-class DumbOptimizer(Optimizer):
-    def __init__(self, params: dict[str, Any]):
-        super().__init__("test.txt")
-
-    def optimize(self, params: Any,
-                 single_run: Callable[[dict], float]) -> None:
-        logger.info("Optimizer RUN")
-        return single_run(params)

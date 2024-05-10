@@ -11,11 +11,11 @@ class Matlab:
         self.eval("clear all")
 
     def eval(self, command: str, outputs: int = 0) -> Any:
-        return self.engine.eval(command, nargout=outputs)  # type: ignore
+        return self.engine.eval(command, nargout=outputs)
 
     def exec(self, script: str, output_args: int = 0) -> Any:
         script = getattr(self.engine, script)
-        script(nargout=output_args)
+        return script(nargout=output_args)  # type: ignore
 
     def __del__(self) -> None:
         self.engine.quit()  # type: ignore
