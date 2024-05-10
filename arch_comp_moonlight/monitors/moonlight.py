@@ -3,7 +3,6 @@ from ..experiment.trace import Trace
 from moonlight import ScriptLoader  # type: ignore
 import numpy as np
 from logging import getLogger
-from os import path
 from numpy.typing import NDArray
 from typing import TypeVar
 
@@ -17,8 +16,8 @@ T = TypeVar('T')
 class Moonlight(Monitor[T]):
     def __init__(self, spec: str) -> None:
         super().__init__()
-        dir = path.dirname(path.realpath(__file__))
-        file = f"{dir}/{spec}"
+        file = f"{spec}"
+        logger.info(f"Loading moonlight script from {file}")
         self.moonlight = ScriptLoader.loadFromFile(file)  # type: ignore
 
     def run(self, trace: Trace[T], formula: str) \

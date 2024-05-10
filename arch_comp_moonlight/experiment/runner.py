@@ -34,8 +34,8 @@ class Runner(ABC, Generic[T]):
         output_file = f"{config.monitor_formula_name}{params}_results.csv"
         self.store = Store(f"{output_dir}/{output_file}")
 
-        logger.info(f"Running {config.exp_name} \
-                    experiment for {config.exp_repetitions} repetitions.")
+        logger.info(
+            f"Running {config.exp_name} experiment for {config.exp_repetitions} repetitions.""")
 
     def _hyper_params_to_string(self, params: dict[str, Any]) -> str:
         """Converts the hyper parameters to a string."""

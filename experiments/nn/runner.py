@@ -13,7 +13,7 @@ from .simulator import NNSimulator, TraceValue
 
 dir = path.dirname(path.realpath(__file__))
 
-EXP_DIR = f"{dir}/../../benchmarks/NN - Magnet"
+EXP_DIR = f"{dir}/../../models/NN - Magnet"
 
 logger = getLogger(__name__)
 
@@ -27,7 +27,7 @@ nn_config = Configuration(
     },
     simulator_repetitions=1,
     # Experiment-specific
-    monitor_spec="spec_nn.mls",
+    monitor_spec=f"{dir}/spec_nn.mls",
     monitor_formula_name="nn",
     optimization_lower_bounds=0.0,
     optimization_upper_bounds=1.0,
