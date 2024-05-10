@@ -37,7 +37,7 @@ nn_config = Configuration(
 
 Params = TypedDict('Params', {'length': int})
 
-class NNRunner(Runner):
+class NNRunner(Runner[Params]):
     def __init__(self, config: Configuration):
         super().__init__(config)
         logger.debug(config)

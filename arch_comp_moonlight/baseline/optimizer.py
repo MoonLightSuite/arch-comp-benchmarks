@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 from typing import Callable, Any, Union
+import numpy as np
 
 import os
 
@@ -9,7 +10,7 @@ class Optimizer(ABC):
         pass
 
     @abstractmethod
-    def optimize(self, simulator: Callable[[dict[str, float]], Any]) -> Union[dict, None]:
+    def optimize(self, simulator: Callable[[dict[str, np.float64]], Any]) -> Union[dict, None]:
         """Runs an instance of the monitor on a trace."""
         pass
 

@@ -237,3 +237,6 @@ fabric.properties
 *.asv
 slprj/
 *.slxc
+
+# Generated outputs
+output/

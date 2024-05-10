@@ -1,9 +1,16 @@
 from typing import Any, Callable
+from os import path
 
 
 class Store:
-    def __init__(self):
-        pass
+    header = """\
+"system","property","simulations","time","robustness","falsified","input"\
+"""
+
+    def __init__(self, filename: str):
+        if not path.isfile(filename):
+            with open(filename, 'w') as f:
+                f.write(self.header + '\n')
 
     def do_store(self, store: Callable, params: dict[str, Any], robustness: float) -> None:
         input_params_str = ','.join([str(v) for v in params.values()])
