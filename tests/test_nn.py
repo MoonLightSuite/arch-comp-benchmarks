@@ -1,4 +1,4 @@
-from arch_comp_moonlight.nn.runner import NNRunner, Params, nn_config, Iteration
+from experiments.nn.runner import NNRunner, Params, nn_config, Iteration
 
 
 def test_nn():

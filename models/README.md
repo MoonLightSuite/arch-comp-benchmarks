@@ -1,0 +1,1 @@
+This directory is the untouched benchmark models directory as provided by the ARCH-COMP team.

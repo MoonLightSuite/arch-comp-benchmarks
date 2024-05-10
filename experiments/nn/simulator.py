@@ -1,8 +1,8 @@
 
-from ..experiment.trace import Trace
-from ..utils import unpack
-from ..matlab import Matlab
-from ..baseline.simulator import Simulator
+from arch_comp_moonlight.experiment.trace import Trace
+from arch_comp_moonlight.utils import unpack
+from arch_comp_moonlight.matlab import Matlab
+from arch_comp_moonlight.baseline.simulator import Simulator
 import os
 import numpy as np
 from logging import getLogger

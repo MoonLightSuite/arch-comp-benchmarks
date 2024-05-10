@@ -1,1 +1,0 @@
-This directory is the untouched benchmarks directory as provided by the ARCH-COMP team.

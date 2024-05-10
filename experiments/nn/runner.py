@@ -1,14 +1,15 @@
 from os import path
 from logging import getLogger
 from typing import TypedDict
-from ..experiment.iteration import Iteration
-from .simulator import NNSimulator, TraceValue
-from ..nn.monitor import NNMonitor
-from ..experiment.trace import Trace
-from ..experiment.configuration import Configuration
-from ..experiment.runner import Runner
-from ..optimizers.turbo import Turbo
 import numpy as np
+
+from arch_comp_moonlight.experiment.iteration import Iteration
+from arch_comp_moonlight.monitors.moonlight import Moonlight
+from arch_comp_moonlight.experiment.trace import Trace
+from arch_comp_moonlight.experiment.configuration import Configuration
+from arch_comp_moonlight.experiment.runner import Runner
+from arch_comp_moonlight.optimizers.turbo import Turbo
+from .simulator import NNSimulator, TraceValue
 
 dir = path.dirname(path.realpath(__file__))
 
@@ -41,7 +42,7 @@ class NNRunner(Runner[Params]):
         super().__init__(config)
         logger.debug(config)
         self.simulator = NNSimulator(model_path=EXP_DIR)
-        self.monitor = NNMonitor(spec=config.monitor_spec)
+        self.monitor = Moonlight[TraceValue](spec=config.monitor_spec)
 
     def single_run(self, params: dict[str, np.float64]) -> np.float64:
         logger.info(f"Running simulator with params: {params}")
