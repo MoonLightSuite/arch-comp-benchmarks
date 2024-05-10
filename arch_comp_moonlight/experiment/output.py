@@ -19,8 +19,8 @@ class Configuration:
     """
     exp_name: str
     exp_batch_name: str
-    exp_repetitions: int = 1
     random_samples: int
     optimization_iterations: int
     other_params: dict[str, list[Any]]
     optimizer: Callable[[dict[str, Any]], Optimizer]
+    exp_repetitions: int = 1

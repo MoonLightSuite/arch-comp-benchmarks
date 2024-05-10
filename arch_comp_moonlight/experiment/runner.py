@@ -1,3 +1,6 @@
+from typing import TypeVar, Generic
+
+from arch_comp_moonlight.experiment.iteration import Iteration
 from ..utils import nested_loops_from_dict_of_lists
 from abc import ABC, abstractmethod
 from typing import Any
@@ -7,8 +10,10 @@ from .store import Store
 
 logger = logging.getLogger(__name__)
 
+T = TypeVar("T")
 
-class Runner(ABC):
+
+class Runner(ABC, Generic[T]):
     """
     Runner is an abstract class that defines the interface for running an experiment.
 
@@ -38,7 +43,7 @@ class Runner(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    def optimizer_run(self, iter_params) -> None:
+    def optimizer_run(self, iter_params: Iteration[T]) -> None:
         """Runs the optimizer for a single parameter combination.
         The optimizer will call the single_run method to run the simulator and monitor as much as needed.
         """

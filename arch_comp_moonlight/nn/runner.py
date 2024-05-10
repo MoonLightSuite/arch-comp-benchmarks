@@ -37,9 +37,6 @@ nn_config = Configuration(
 
 Params = TypedDict('Params', {'length': int})
 
-
-
-
 class NNRunner(Runner):
     def __init__(self, config: Configuration):
         super().__init__(config)

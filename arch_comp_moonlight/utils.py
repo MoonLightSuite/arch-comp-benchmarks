@@ -6,7 +6,7 @@ logger = logging.getLogger(__name__)
 
 
 def nested_loops_from_dict_of_lists(param_dict: dict[str, list[Any]],
-                                    action: Callable[[dict[str, Any]], None]):
+                                    action: Callable[[dict[str, Any]], Any]):
     """
     Given a dictionary of lists, we perform a nested loop over all the lists and call the given action with the current combination of values.
 

@@ -11,7 +11,7 @@ class Matlab:
         self.eval("clear all")
 
     def eval(self, command: str, outputs: int = 0) -> Any:
-        return self.engine.eval(command, nargout=outputs)
+        return self.engine.eval(command, nargout=outputs)  # type: ignore
 
     def exec(self, script: str, output_args: int = 0) -> Any:
         script = getattr(self.engine, script)
