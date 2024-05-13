@@ -27,12 +27,7 @@ class Runner(ABC, Generic[T]):
     def __init__(self, config: Configuration):
         """Sets the input parameters for running an experiment."""
         self.config = config
-        output_dir = f"output/{config.exp_name}/{config.exp_batch_name}"
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-        params = self._hyper_params_to_string(config.simulator_hyper_params)
-        output_file = f"{config.monitor_formula_name}{params}_results.csv"
-        self.store = Store(f"{output_dir}/{output_file}")
+        self.store = Store()
 
         logger.info(
             f"Running {config.exp_name} experiment for {config.exp_repetitions} repetitions.""")
@@ -66,12 +61,20 @@ class Runner(ABC, Generic[T]):
         """
         raise NotImplementedError
 
+    def _compute_output_file(self, iteration: Iteration[T]) -> str:
+        params = self._hyper_params_to_string(
+            iteration["params"])  # type: ignore
+        output_dir = f"output/{self.config.exp_name}/{self.config.exp_batch_name}"
+        output_file = f"{self.config.monitor_formula_name}{params}_results.csv"
+        return f"{output_dir}/{output_file}"
+
     def optimizer_run(self, iteration: Iteration[T]) -> None:
         """Runs the optimizer for a single parameter combination."""
         self.optimizer: Optimizer
+        filename = self._compute_output_file(iteration)
         self.prepare_optimizer(iteration)
         self.optimizer.optimize(self._simulator)
-        self.store.save()
+        self.store.save(filename)
 
     def _simulator(self, params: dict[str, np.float64]) -> np.float64:
         """Runs the simulator and monitor for a single parameter combination."""

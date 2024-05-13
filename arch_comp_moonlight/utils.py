@@ -1,8 +1,12 @@
-from typing import Callable, Any, Mapping
+from typing import Callable, Any, Mapping, TypeVar
 from itertools import product
 import logging
 
+from arch_comp_moonlight.experiment.iteration import Iteration
+
 logger = logging.getLogger(__name__)
+
+T = TypeVar("T")
 
 
 def nested_loops_from_dict_of_lists(param_dict: Mapping[str, list[Any]],
@@ -28,8 +32,22 @@ def nested_loops_from_dict_of_lists(param_dict: Mapping[str, list[Any]],
 
     for combination in product(*lists):
         combo_dict = dict(zip(keys, combination))
-        logger.info(f"Experiment parameters: {combo_dict} ##################")
-        action(combo_dict)
+        structured_combo_dict = _prepare_iteration(combo_dict)
+        action(structured_combo_dict)
+
+
+def _prepare_iteration(params: dict[str, Any]) -> Iteration[object]:
+    """
+    Prepare the iteration for the optimizer
+    """
+    iter_keys = list(Iteration.__annotations__.keys())
+    iter_keys.remove('params')
+
+    iter_basic = {key: params[key] for key in iter_keys if key in params}
+    iter_params = {key: params[key]
+                   for key in params.keys() if key not in iter_keys}
+
+    return {**iter_basic, 'params': iter_params}  # type: ignore
 
 
 def unpack(params: dict[Any, Any]) -> str:

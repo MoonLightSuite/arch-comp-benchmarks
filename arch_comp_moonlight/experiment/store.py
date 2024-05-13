@@ -32,12 +32,7 @@ logger = getLogger(__name__)
 
 
 class Store:
-    def __init__(self, filename: str):
-        if not os.path.isfile(filename):
-            with open(filename, 'w') as f:
-                f.write(self._print_header() + '\n')
-                logger.debug(f"Created file: {filename}.")
-        self.filename = filename
+    def __init__(self):
         self.last_line: Line | None = None
 
     def _sort_line(self, line: Line) -> Line:
@@ -73,11 +68,21 @@ class Store:
             self.last_line = {}
         self.last_line[key] = value
 
-    def save(self) -> None:
+    def _create_file(self, filename: str) -> None:
+        if not os.path.exists(filename):
+            os.makedirs(filename)
+        if not os.path.isfile(filename):
+            with open(filename, 'w') as f:
+                f.write(self._print_header() + '\n')
+                logger.debug(f"Created file: {filename}.")
+        logger.debug(f"File '{filename}' already exists, skipping creation.")
+
+    def save(self, destination: str) -> None:
         """Saves the data to the file."""
-        logger.info(f"Saving to file: {self.filename}")
+        logger.info(f"Saving to file: {destination}")
+        self._create_file(destination)
         if (self.last_line is not None):
-            with open(self.filename, 'a') as f:
+            with open(destination, 'a') as f:
                 f.write(self._print_line(self.last_line) + '\n')
         else:
             logger.warning("No data to save.")

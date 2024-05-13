@@ -22,9 +22,9 @@ nn_config = Configuration(
     exp_name="NN",
     exp_batch_name="TURBO",
     exp_instance_number=1,
-    optimization_iterations=7,
+    optimization_iterations=14,
     simulator_hyper_params={
-        'i': [5],
+        'length': [5],
     },
     simulator_model_path=EXP_DIR,
     simulator_repetitions=1,
@@ -56,6 +56,7 @@ class NNRunner(Runner[Params]):
 
     def prepare_optimizer(self, iteration: Iteration[Params]) -> None:
         logger.info(f"Repetition n.: {iteration['n']}")
+        logger.info(f"Iteration params: {iteration}")
         length = iteration["params"]["length"]
         lower_bounds = self.config.optimization_lower_bounds * np.ones(length)
         upper_bounds = self.config.optimization_upper_bounds * np.ones(length)
