@@ -51,7 +51,7 @@ class NNSimulator(Simulator[TraceValue]):
         [error, pos] = np.asarray(yout).transpose().tolist()
         values = list(zip(error, pos))
 
-        self.store.store(LineKey.time, str(times[-1]))
-        self.store.store(LineKey.input, str(values))
+        self.store.store(LineKey.time, times[-1])
+        self.store.store(LineKey.input, str(values)) # TODO: change to Matlab output
 
         return {'times': times, 'values': values}

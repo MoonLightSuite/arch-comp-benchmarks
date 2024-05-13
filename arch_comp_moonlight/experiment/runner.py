@@ -38,7 +38,7 @@ class Runner(ABC, Generic[T]):
             f"Running {config.exp_name} experiment for {config.exp_repetitions} repetitions.""")
 
         self.store.store(LineKey.system, config.exp_name)
-        self.store.store(LineKey.instance, str(config.exp_instance_number))
+        self.store.store(LineKey.instance, config.exp_instance_number)
 
     def _hyper_params_to_string(self, params: dict[str, Any]) -> str:
         """Converts the hyper parameters to a string."""
@@ -76,7 +76,7 @@ class Runner(ABC, Generic[T]):
     def _simulator(self, params: dict[str, np.float64]) -> np.float64:
         """Runs the simulator and monitor for a single parameter combination."""
         robustness = self.single_run(params)
-        self.store.store(LineKey.robustness, str(robustness))
+        self.store.store(LineKey.robustness, robustness)
         if robustness < 0:
             self.store.store(LineKey.falsified, "yes")
         else:

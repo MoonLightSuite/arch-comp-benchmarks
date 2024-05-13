@@ -56,7 +56,6 @@ class Turbo(Optimizer):
             opt.optimize()
 
     def _simulation(self, params: NDArray[np.float64]) -> np.float64:
-        logger.info(f"Running simulator with params: {params}")
         return self.simulator(self.__array_to_dict(params))
 
     def __array_to_dict(self, raw_params: NDArray[np.float64]) \
