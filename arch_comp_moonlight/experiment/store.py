@@ -11,6 +11,7 @@ class LineKey(Enum):
     robustness = auto()
     falsified = auto()
     input = auto()
+    instance = auto()
 
 
 Line = dict[LineKey, str]
@@ -23,6 +24,7 @@ class Store:
         if not os.path.isfile(filename):
             with open(filename, 'w') as f:
                 f.write(self._print_header() + '\n')
+                logger.debug(f"Created file: {filename}.")
         self.filename = filename
         self.last_line: Line | None = None
 

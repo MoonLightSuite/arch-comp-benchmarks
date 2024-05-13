@@ -1,5 +1,7 @@
 
 
+from arch_comp_moonlight.experiment.configuration import Configuration
+from arch_comp_moonlight.experiment.store import Store
 from ..baseline.optimizer import Optimizer
 from typing import Callable
 import numpy as np
@@ -13,10 +15,11 @@ logger = getLogger(__name__)
 
 class Turbo(Optimizer):
     def __init__(self,
-                 optimization_iters: int,
+                 config: Configuration,
+                 store: Store,
                  lower_bounds: NDArray[np.float64],
                  upper_bounds: NDArray[np.float64]) -> None:
-        super().__init__()
+        super().__init__(config, store)
 
         _check_bounds(lower_bounds, upper_bounds)
 
@@ -32,9 +35,9 @@ class Turbo(Optimizer):
             lb=lower_bounds,  # Numpy array specifying lower bounds
             ub=upper_bounds,  # Numpy array specifying upper bounds
             n_init=SAMPLES,  # Number of initial points from an Latin hypercube design
-            max_evals=optimization_iters,  # Maximum number of evaluations
+            max_evals=config.optimization_iterations,  # Maximum number of evaluations
             batch_size=PYTORCH_BATCH_SIZE,  # Optimizes TuRBO's computations
-            verbose=False,  # Print information from each batch
+            verbose=True,  # Print information from each batch
             use_ard=False,  # Set to true if you want to use ARD for the GP kernel
             max_cholesky_size=2000,  # When we switch from Cholesky to Lanczos
             n_training_steps=50,  # Number of steps of ADAM to learn the hypers
@@ -53,6 +56,7 @@ class Turbo(Optimizer):
             opt.optimize()
 
     def _simulation(self, params: NDArray[np.float64]) -> np.float64:
+        logger.info(f"Running simulator with params: {params}")
         return self.simulator(self.__array_to_dict(params))
 
     def __array_to_dict(self, raw_params: NDArray[np.float64]) \

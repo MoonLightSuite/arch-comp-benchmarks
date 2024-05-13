@@ -20,11 +20,13 @@ class Configuration:
     """
     exp_name: str
     exp_batch_name: str
+    exp_instance_number: int
     optimization_iterations: int
     optimization_lower_bounds: float
     optimization_upper_bounds: float
     monitor_spec: str
     monitor_formula_name: str
     simulator_hyper_params: dict[str, list[Any]]
+    simulator_model_path: str
     simulator_repetitions: int = 1
     exp_repetitions: int = 1

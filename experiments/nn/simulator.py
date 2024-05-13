@@ -1,4 +1,6 @@
 
+from arch_comp_moonlight.experiment.configuration import Configuration
+from arch_comp_moonlight.experiment.store import LineKey, Store
 from arch_comp_moonlight.experiment.trace import Trace
 from arch_comp_moonlight.utils import unpack
 from arch_comp_moonlight.matlab import Matlab
@@ -15,9 +17,10 @@ TraceValue = tuple[np.float64, np.float64]
 
 
 class NNSimulator(Simulator[TraceValue]):
-    def __init__(self, model_path: str) -> None:
+    def __init__(self, config: Configuration, store: Store) -> None:
+        super().__init__(config=config, store=store)
         self.matlab = Matlab()
-        self.matlab.eval(f"addpath('{model_path}');")
+        self.matlab.eval(f"addpath('{config.simulator_model_path}');")
 
     def run(self, params: dict[str, np.float64]) -> Trace[TraceValue]:
         self.init()
@@ -46,5 +49,9 @@ class NNSimulator(Simulator[TraceValue]):
 
         times = np.asarray(tout).transpose().tolist()[0]
         [error, pos] = np.asarray(yout).transpose().tolist()
+        values = list(zip(error, pos))
 
-        return {'times': times, 'values': list(zip(error, pos))}
+        self.store.store(LineKey.time, str(times[-1]))
+        self.store.store(LineKey.input, str(values))
+
+        return {'times': times, 'values': values}

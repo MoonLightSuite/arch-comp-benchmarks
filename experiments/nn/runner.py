@@ -21,14 +21,16 @@ logger = getLogger(__name__)
 nn_config = Configuration(
     exp_name="NN",
     exp_batch_name="TURBO",
+    exp_instance_number=1,
     optimization_iterations=7,
     simulator_hyper_params={
         'i': [5],
     },
+    simulator_model_path=EXP_DIR,
     simulator_repetitions=1,
     # Experiment-specific
     monitor_spec=f"{dir}/spec_nn.mls",
-    monitor_formula_name="nn",
+    monitor_formula_name="NN",
     optimization_lower_bounds=0.0,
     optimization_upper_bounds=1.0,
 )
@@ -41,13 +43,12 @@ class NNRunner(Runner[Params]):
     def __init__(self, config: Configuration):
         super().__init__(config)
         logger.debug(config)
-        self.simulator = NNSimulator(model_path=EXP_DIR)
+        self.simulator = NNSimulator(config, self.store)
         self.monitor = Moonlight[TraceValue](spec=config.monitor_spec)
 
     def single_run(self, params: dict[str, np.float64]) -> np.float64:
         logger.info(f"Running simulator with params: {params}")
         trace: Trace[TraceValue] = self.simulator.run(params)
-        logger.info
         robustness = self.monitor.run(trace, self.config.monitor_formula_name)
         value = robustness.transpose()[1][0]
         logger.info(f"Robustness: {value}")
@@ -60,7 +61,8 @@ class NNRunner(Runner[Params]):
         upper_bounds = self.config.optimization_upper_bounds * np.ones(length)
 
         self.optimizer = Turbo(
-            optimization_iters=self.config.optimization_iterations,
+            config=self.config,
+            store=self.store,
             lower_bounds=lower_bounds,
             upper_bounds=upper_bounds
         )

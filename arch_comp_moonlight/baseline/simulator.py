@@ -2,6 +2,9 @@
 from abc import ABC, abstractmethod
 from typing import TypeVar, Generic
 
+from arch_comp_moonlight.experiment.configuration import Configuration
+from arch_comp_moonlight.experiment.store import LineKey, Store
+
 from ..experiment.trace import Trace
 import numpy as np
 
@@ -23,9 +26,10 @@ class Simulator(ABC, Generic[T]):
     ```
     """
 
-    def __init__(self) -> None:
-        # hook for simulation initialization
-        pass
+    def __init__(self, config: Configuration, store: Store) -> None:
+        self.store = store
+        self.config = config
+        store.store(LineKey.property, config.monitor_formula_name)
 
     @abstractmethod
     def run(self, params: dict[str, np.float64]) -> Trace[T]:
