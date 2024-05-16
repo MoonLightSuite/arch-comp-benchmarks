@@ -9,7 +9,7 @@ from ..experiment.configuration import Configuration
 import logging
 from .store import LineKey, Store
 import numpy as np
-import os
+from definitions import ROOT_DIR
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ class Runner(ABC, Generic[T]):
     def _compute_output_file(self, iteration: Iteration[T]) -> str:
         params = self._hyper_params_to_string(
             iteration["params"])  # type: ignore
-        output_dir = f"output/{self.config.exp_name}/{self.config.exp_batch_name}"
+        output_dir = f"{ROOT_DIR}/output/{self.config.exp_name}/{self.config.exp_batch_name}"
         output_file = f"{self.config.monitor_formula_name}{params}_results.csv"
         return f"{output_dir}/{output_file}"
 

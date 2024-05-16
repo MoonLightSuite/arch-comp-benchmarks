@@ -4,7 +4,7 @@ version = "0.1.0"
 description = "Moonlight Benchmarks for the ARCH-COMP FALS competition"
 authors = ["Ennio Visconti <ennio.visconti@gmail.com>"]
 readme = "README.md"
-packages = [{ include = "arch_comp_moonlight" }]
+packages = [{ include = "arch_comp_moonlight" }, { include = "experiments" }]
 
 [tool.poetry.dependencies]
 python = "~3.11"
@@ -20,6 +20,9 @@ pytest-mock = "^3.14.0"
 pytest-watch = "^4.2.0"
 pyright = "^1.1.361"
 pytest-cov = "^5.0.0"
+
+[tool.poetry.scripts]
+experiments = "experiments.main:main"
 
 [tool.pyright]
 enableTypeIgnoreComments = true

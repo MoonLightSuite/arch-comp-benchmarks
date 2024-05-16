@@ -11,29 +11,10 @@ from arch_comp_moonlight.experiment.runner import Runner
 from arch_comp_moonlight.optimizers.turbo import Turbo
 from .simulator import NNSimulator, TraceValue
 
-dir = path.dirname(path.realpath(__file__))
-
-EXP_DIR = f"{dir}/../../models/NN - Magnet"
-
 logger = getLogger(__name__)
 
 
-nn_config = Configuration(
-    exp_name="NN",
-    exp_batch_name="TURBO",
-    exp_instance_number=1,
-    optimization_iterations=14,
-    simulator_hyper_params={
-        'length': [5],
-    },
-    simulator_model_path=EXP_DIR,
-    simulator_repetitions=1,
-    # Experiment-specific
-    monitor_spec=f"{dir}/spec_nn.mls",
-    monitor_formula_name="NN",
-    optimization_lower_bounds=0.0,
-    optimization_upper_bounds=1.0,
-)
+# TODO: change simulations to report the first falsifying one
 
 
 Params = TypedDict('Params', {'length': int})
