@@ -41,16 +41,7 @@ class Store:
         return {key: line[key] for key in keys}
 
     def _print_line(self, line: Line) -> str:
-        # return f'"{line[LineKey.system]}","{line[LineKey.property]}",{line[LineKey.simulations]},{line[LineKey.time]},{line[LineKey.robustness]},"{line[LineKey.falsified]}","{line[LineKey.input]}",{line[LineKey.instance]}'
-        # output = ""
-        # for key in line:
-        #     if(line[key].isnumeric()):
-        #         output += f'{line[key]},'
-        #     else:
-        #         output += f'"{line[key]}",'
-        # return output
         line = self._sort_line(line)
-
         return ",".join([self._print_value(line[key]) for key in line])
 
     def _print_value(self, value: Any) -> str:

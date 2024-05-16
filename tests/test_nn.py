@@ -1,14 +1,9 @@
 from experiments.nn.runner import NNRunner
-from experiments.main import nn_config
+from experiments.main import nn_config_1
 
 
 def test_nn():
-    runner = NNRunner(nn_config)
-    assert nn_config == runner.config
+    runner = NNRunner(nn_config_1)
+    assert nn_config_1 == runner.config
 
-    # iteration = Iteration[Params](n=1,
-    #                               params={
-    #                                   "length": 3
-    #                               })
-    # assert runner.optimizer_run(iteration) is None
     assert runner.run_batch() is None

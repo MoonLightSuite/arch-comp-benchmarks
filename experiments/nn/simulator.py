@@ -54,6 +54,6 @@ class NNSimulator(Simulator[TraceValue]):
         self.store.store(LineKey.time, times[-1])
 
         u = self.matlab.eval("u;", outputs=1)
-        self.store.store(LineKey.input, u)
+        self.store.store(LineKey.input, f"\"{u}\"")
 
         return {'times': times, 'values': values}
