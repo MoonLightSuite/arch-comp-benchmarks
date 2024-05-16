@@ -1,4 +1,5 @@
-from experiments.nn.runner import NNRunner, nn_config
+from experiments.nn.runner import NNRunner
+from experiments.main import nn_config
 
 
 def test_nn():

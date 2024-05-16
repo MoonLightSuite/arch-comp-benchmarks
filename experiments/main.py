@@ -16,14 +16,14 @@ nn_config = Configuration(
     exp_instance_number=1,
     exp_repetitions=10,
     optimization_iterations=28,
-    simulator_hyper_params={
-        'length': [13],
-    },
     simulator_model_path=EXP_DIR,
     simulator_repetitions=1,
     # Experiment-specific
     monitor_spec=f"{dir}/nn/spec_nn.mls",
     monitor_formula_name="NN",
+    simulator_hyper_params={
+        'length': [13],
+    },
     optimization_lower_bounds=1.0,
     optimization_upper_bounds=3.0,
 )
