@@ -69,8 +69,7 @@ class Store:
         self.last_line[key] = value
 
     def _create_file(self, filename: str) -> None:
-        if not os.path.exists(filename):
-            os.makedirs(filename)
+        os.makedirs(os.path.dirname(filename), exist_ok=True)
         if not os.path.isfile(filename):
             with open(filename, 'w') as f:
                 f.write(self._print_header() + '\n')
