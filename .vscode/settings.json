@@ -1,4 +1,14 @@
 {
   "python.analysis.typeCheckingMode": "basic",
-  "python.analysis.autoImportCompletions": true
+  "python.analysis.autoImportCompletions": true,
+  "files.exclude": {
+    "**/__pycache__": true,
+    "**/.pytest_cache": true,
+    "**/slprj": true,
+    ".coverage": true,
+    "**/*.slxc": true,
+    ".idea": true,
+    ".vscode": true,
+    "**/__init__.py": true
+  }
 }
