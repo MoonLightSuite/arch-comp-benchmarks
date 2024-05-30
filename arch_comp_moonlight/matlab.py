@@ -10,6 +10,9 @@ class Matlab:
     def reset_engine(self) -> None:
         self.eval("clear all")
 
+    def cd(self, path: str) -> None:
+        self.engine.cd(path, nargout=0)  # type: ignore
+
     def eval(self, command: str, outputs: int = 0) -> Any:
         return self.engine.eval(command, nargout=outputs)  # type: ignore
 

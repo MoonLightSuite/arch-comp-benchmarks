@@ -28,6 +28,8 @@ class Runner(ABC, Generic[T]):
         """Sets the input parameters for running an experiment."""
         self.config = config
         self.store = Store()
+        self.optimizer: Optimizer
+        logger.debug(config)
 
         logger.info(
             f"Running {config.exp_name} experiment for {config.exp_repetitions} repetitions.""")
@@ -57,7 +59,7 @@ class Runner(ABC, Generic[T]):
     @abstractmethod
     def prepare_optimizer(self, iteration: Iteration[T]) -> None:
         """Prepares the optimizer to run for a single parameter combination.
-        The optimizer will call the single_run method to run the simulator and monitor as much as needed.
+        The optimizer will call the `single_run` method to run the simulator and monitor as much as needed.
         """
         raise NotImplementedError
 
@@ -70,15 +72,19 @@ class Runner(ABC, Generic[T]):
 
     def optimizer_run(self, iteration: Iteration[T]) -> None:
         """Runs the optimizer for a single parameter combination."""
-        self.optimizer: Optimizer
         filename = self._compute_output_file(iteration)
+        logger.info(f"Repetition n.: {iteration['n']}")
+        logger.info(f"Iteration params: {iteration}")
         self.prepare_optimizer(iteration)
         self.optimizer.optimize(self._simulator)
         self.store.save(filename)
 
     def _simulator(self, params: dict[str, np.float64]) -> np.float64:
         """Runs the simulator and monitor for a single parameter combination."""
+        logger.info(f"Running simulator with params: {params}")
         robustness = self.single_run(params)
+        logger.info(f"Robustness: {robustness}")
+
         self.store.store(LineKey.robustness, robustness)
         if robustness < 0:
             self.store.store(LineKey.falsified, "yes")

@@ -21,39 +21,37 @@ class NNSimulator(Simulator[TraceValue]):
         super().__init__(config=config, store=store)
         self.matlab = Matlab()
         self.matlab.eval(f"addpath('{config.simulator_model_path}');")
+        self._init()
 
     def run(self, params: dict[str, np.float64]) -> Trace[TraceValue]:
-        self.init()
-        self.pass_input(params)
-
+        self._pass_input(params)
         self.matlab.eval("[tout, yout, xin] = run_neural(u, T);")
+        return self._prepare_output()
 
-        return self.prepare_output()
-
-    def init(self) -> None:
+    def _init(self) -> None:
         self.matlab.eval(f"addpath('{dir}');")
         self.matlab.eval("u_ts = 0.001;")
         self.matlab.eval("alpha = 0.005;")
         self.matlab.eval("beta = 0.03;")
         self.matlab.eval("T = 40;")
 
-    def pass_input(self, params: dict[str, np.float64]) -> None:
+    def _pass_input(self, params: dict[str, np.float64]) -> None:
         length = len(params.keys())
+        logger.info("Params: ", params)
         self.matlab.eval(f"t__ = linspace(0, 40, {length})';")
         self.matlab.eval(f"u__ = {unpack(params)};")
         self.matlab.eval("u = [t__, u__];")
 
-    def prepare_output(self) -> Trace[TraceValue]:
-        yout = self.matlab.eval("yout;", outputs=1)
+    def _prepare_output(self) -> Trace[TraceValue]:
+        u = self.matlab.eval("u;", outputs=1)
         tout = self.matlab.eval("tout;", outputs=1)
+        yout = self.matlab.eval("yout;", outputs=1)
 
         times = np.asarray(tout).transpose().tolist()[0]
         [error, pos] = np.asarray(yout).transpose().tolist()
         values = list(zip(error, pos))
 
         self.store.store(LineKey.time, times[-1])
-
-        u = self.matlab.eval("u;", outputs=1)
         self.store.store(LineKey.input, f"{u}")
 
         return {'times': times, 'values': values}

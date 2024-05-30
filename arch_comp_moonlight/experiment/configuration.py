@@ -12,8 +12,8 @@ class Configuration:
     -   exp_batch_name: the name of the batch of experiments (typically the optimizer or the specific configuration of the optimizer)
     -   exp_repetitions: the number of repetitions for each experiment
     -   optimization_iterations: the number of optimization iterations before stopping
-    -   optimization_lower_bounds: the lower bound for the optimization
-    -   optimization_upper_bounds: the upper bound for the optimization
+    -   optimization_lower_bounds: the lower bounds for the optimization. They must be as many as the parameters of the model
+    -   optimization_upper_bounds: the upper bounds for the optimization. They must be as many as the parameters of the model
     -   other_params: a dictionary with the parameters to optimize
     -   formula_name: the name of the formula to monitor
     -   simulator_repetitions: the number of repetitions for each simulation
@@ -22,8 +22,8 @@ class Configuration:
     exp_batch_name: str
     exp_instance_number: int
     optimization_iterations: int
-    optimization_lower_bounds: float
-    optimization_upper_bounds: float
+    optimization_lower_bounds: list[float]
+    optimization_upper_bounds: list[float]
     monitor_spec: str
     monitor_formula_name: str
     simulator_hyper_params: dict[str, list[Any]]
