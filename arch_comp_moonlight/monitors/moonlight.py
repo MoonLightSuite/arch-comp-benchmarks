@@ -23,6 +23,5 @@ class Moonlight(Monitor[T]):
     def run(self, trace: Trace[T], formula: str) \
             -> NDArray[np.float64]:
         monitor = self.moonlight.getMonitor(formula)  # type: ignore
-        logger.info(f"Monitor values: {trace['values']}")
         res = monitor.monitor(trace['times'], trace['values'])  # type: ignore
         return np.array(res)  # type: ignore
