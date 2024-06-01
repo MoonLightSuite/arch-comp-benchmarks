@@ -1,0 +1,4 @@
+signal { real y_1; }
+domain minmax;
+
+formula F16 = globally [0, 15] (y_1 > 0);
