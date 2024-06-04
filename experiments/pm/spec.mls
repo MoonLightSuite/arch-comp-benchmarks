@@ -1,0 +1,12 @@
+signal { real y_1; real y_2; real y_3; }
+domain minmax;
+
+/* Auxiliary formulae */
+formula f11 = y_3 <= 15;
+formula f21 = y_3 >= 8;
+formula f1 = globally [0, 10] f11;
+formula f2 = eventually [0, 10] f21;
+
+
+/* Final formula */
+formula PM = f1 & f2;
