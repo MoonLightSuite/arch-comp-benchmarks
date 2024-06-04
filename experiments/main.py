@@ -113,7 +113,9 @@ pm_config = Configuration(
     # Experiment-specific
     monitor_spec=f"{dir}/pm/spec.mls",
     monitor_formula_name="PM",
-    simulator_hyper_params={},
+    simulator_hyper_params={
+        'length': [5],
+    },
     optimization_lower_bounds=[50.0],
     optimization_upper_bounds=[90.0],
 )
@@ -121,10 +123,10 @@ pm_config = Configuration(
 
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
-    # nn = NNRunner(nn_config_2)
-    # nn.run_batch()
-    # f16 = F16Runner(f16_config)
-    # f16.run_batch()
+    nn = NNRunner(nn_config_2)
+    nn.run_batch()
+    f16 = F16Runner(f16_config)
+    f16.run_batch()
     pm = PMRunner(pm_config)
     pm.run_batch()
 
