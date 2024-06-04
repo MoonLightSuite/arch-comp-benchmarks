@@ -8,6 +8,7 @@ from arch_comp_moonlight.baseline.simulator import Simulator
 import os
 import numpy as np
 from logging import getLogger
+from typing import Any
 
 logger = getLogger(__name__)
 
@@ -17,6 +18,8 @@ TraceValue = tuple[np.float64, np.float64]
 
 
 class NNSimulator(Simulator[TraceValue]):
+    t_end = 40
+
     def __init__(self, config: Configuration, store: Store) -> None:
         super().__init__(config=config, store=store)
         self.matlab = Matlab()
@@ -33,12 +36,11 @@ class NNSimulator(Simulator[TraceValue]):
         self.matlab.eval("u_ts = 0.001;")
         self.matlab.eval("alpha = 0.005;")
         self.matlab.eval("beta = 0.03;")
-        self.matlab.eval("T = 40;")
+        self.matlab.eval(f"T = {self.t_end};")
 
     def _pass_input(self, params: dict[str, np.float64]) -> None:
         length = len(params.keys())
-        logger.info("Params: ", params)
-        self.matlab.eval(f"t__ = linspace(0, 40, {length})';")
+        self.matlab.eval(f"t__ = linspace(0, {self.t_end}, {length})';")
         self.matlab.eval(f"u__ = {unpack(params)};")
         self.matlab.eval("u = [t__, u__];")
 
@@ -49,7 +51,7 @@ class NNSimulator(Simulator[TraceValue]):
 
         times = np.asarray(tout).transpose().tolist()[0]
         [error, pos] = np.asarray(yout).transpose().tolist()
-        values = list(zip(error, pos))
+        values: list[tuple[Any, Any]] = list(zip(error, pos))
 
         self.store.store(LineKey.time, times[-1])
         self.store.store(LineKey.input, f"{u}")

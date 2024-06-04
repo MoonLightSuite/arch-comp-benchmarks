@@ -12,7 +12,7 @@ from .simulator import PMSimulator, TraceValue
 
 logger = getLogger(__name__)
 
-Params = TypedDict('Params', {})
+Params = TypedDict('Params', {"segments": int})
 
 
 class PMRunner(Runner[Params]):
@@ -28,11 +28,12 @@ class PMRunner(Runner[Params]):
         return value
 
     def prepare_optimizer(self, iteration: Iteration[Params]) -> None:
-        # length = iteration["params"]["length"]
+        segments = iteration["params"]["segments"]
+        logger.info(f"Segments: {segments}")
         lower = self.config.optimization_lower_bounds[0]
         upper = self.config.optimization_upper_bounds[0]
-        lower_bounds = np.array([lower])
-        upper_bounds = np.array([upper])
+        lower_bounds = lower * np.ones(segments)
+        upper_bounds = upper * np.ones(segments)
 
         self.optimizer = Turbo(
             config=self.config,

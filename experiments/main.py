@@ -102,19 +102,37 @@ f16_config = Configuration(
     optimization_upper_bounds=[pi/4+pi/30, -2/5*pi+pi/20, -pi/4+pi/8],
 )
 
-pm_config = Configuration(
+pm_config_1 = Configuration(
     exp_name="PM",
     exp_batch_name="TURBO",
     exp_instance_number=1,
     exp_repetitions=10,
-    optimization_iterations=10,
+    optimization_iterations=22,
     simulator_model_path=f"{EXP_DIR}/PM - Pacemaker",
     simulator_repetitions=1,
     # Experiment-specific
     monitor_spec=f"{dir}/pm/spec.mls",
     monitor_formula_name="PM",
     simulator_hyper_params={
-        'length': [5],
+        'segments': [10],
+    },
+    optimization_lower_bounds=[50.0],
+    optimization_upper_bounds=[90.0],
+)
+
+pm_config_2 = Configuration(
+    exp_name="PM",
+    exp_batch_name="TURBO",
+    exp_instance_number=2,
+    exp_repetitions=10,
+    optimization_iterations=15,
+    simulator_model_path=f"{EXP_DIR}/PM - Pacemaker",
+    simulator_repetitions=1,
+    # Experiment-specific
+    monitor_spec=f"{dir}/pm/spec.mls",
+    monitor_formula_name="PM",
+    simulator_hyper_params={
+        'segments': [5],
     },
     optimization_lower_bounds=[50.0],
     optimization_upper_bounds=[90.0],
@@ -127,7 +145,7 @@ def main():
     nn.run_batch()
     f16 = F16Runner(f16_config)
     f16.run_batch()
-    pm = PMRunner(pm_config)
+    pm = PMRunner(pm_config_1)
     pm.run_batch()
 
 

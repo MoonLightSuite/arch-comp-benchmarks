@@ -1,10 +1,10 @@
 from experiments.pm.runner import PMRunner
-from experiments.main import pm_config
+from experiments.main import pm_config_1
 
 
 def test_pm():
-    runner = PMRunner(pm_config)
-    assert pm_config == runner.config
+    runner = PMRunner(pm_config_1)
+    assert pm_config_1 == runner.config
 
     print("Running PMRunner")
 

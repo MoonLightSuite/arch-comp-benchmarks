@@ -7,6 +7,9 @@ from arch_comp_moonlight.baseline.simulator import Simulator
 import os
 import numpy as np
 from logging import getLogger
+from typing import Any
+
+from arch_comp_moonlight.utils import unpack
 
 logger = getLogger(__name__)
 
@@ -16,6 +19,8 @@ TraceValue = tuple[np.float64, np.float64, np.float64]
 
 
 class PMSimulator(Simulator[TraceValue]):
+    t_end = 10
+
     def __init__(self, config: Configuration, store: Store) -> None:
         super().__init__(config=config, store=store)
         self.matlab = Matlab()
@@ -24,28 +29,29 @@ class PMSimulator(Simulator[TraceValue]):
 
     def run(self, params: dict[str, np.float64]) -> Trace[TraceValue]:
         self._pass_input(params)
-        self.matlab.eval("[tout, yout] = run_pm(u_1);")
+        self.matlab.eval("[tout, yout] = run_pm(u, T);")
         return self._prepare_output()
 
     def _init(self) -> None:
         self.matlab.eval(f"addpath('{dir}');")
+        self.matlab.eval(f"T = {self.t_end};")
 
     def _pass_input(self, params: dict[str, np.float64]) -> None:
-        logger.info("Params: ", params)
-        self.matlab.eval(f"u_1 = {params['u1']};")
-        # self.matlab.eval(f"T = 15;")
-        # self.matlab.eval(f"u = [0' u_1'];")
+        length = len(params.keys())
+        self.matlab.eval(f"t__ = linspace(0, {self.t_end}, {length})';")
+        self.matlab.eval(f"u__ = {unpack(params)};")
+        self.matlab.eval("u = [t__, u__];")
 
     def _prepare_output(self) -> Trace[TraceValue]:
+        u = self.matlab.eval("u;", outputs=1)
         tout = self.matlab.eval("tout;", outputs=1)
-        u1 = self.matlab.eval("u_1;", outputs=1)
-        y = self.matlab.eval("yout;", outputs=1)
+        yout = self.matlab.eval("yout;", outputs=1)
 
         times = np.asarray(tout).transpose().tolist()[0]
-        [y1, y2, y3] = np.asarray(y).transpose().tolist()
-        values = list(zip(y1, y2, y3))
+        [y1, y2, y3] = np.asarray(yout).transpose().tolist()
+        values: list[tuple[Any, Any, Any]] = list(zip(y1, y2, y3))
 
         self.store.store(LineKey.time, times[-1])
-        self.store.store(LineKey.input, f"{u1}")
+        self.store.store(LineKey.input, f"{u}")
 
         return {'times': times, 'values': values}
