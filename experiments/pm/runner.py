@@ -29,7 +29,6 @@ class PMRunner(Runner[Params]):
 
     def prepare_optimizer(self, iteration: Iteration[Params]) -> None:
         segments = iteration["params"]["segments"]
-        logger.info(f"Segments: {segments}")
         lower = self.config.optimization_lower_bounds[0]
         upper = self.config.optimization_upper_bounds[0]
         lower_bounds = lower * np.ones(segments)

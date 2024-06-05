@@ -53,6 +53,11 @@ class Store:
         header = list(LineKey.__members__.keys())
         return '"' + '","'.join(header) + '"'
 
+    def __getitem__(self, key: LineKey) -> str | float64 | int | None:
+        if (self.last_line is None):
+            return None
+        return self.last_line.get(key, None)
+
     def store(self, key: LineKey, value: str | float64 | int) -> None:
         """Stores the data of the optimization."""
         if (self.last_line is None):

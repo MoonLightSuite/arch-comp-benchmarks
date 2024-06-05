@@ -43,9 +43,8 @@ class Runner(ABC, Generic[T]):
 
     def run_batch(self) -> None:
         """Runs the experiment for all the parameters combinations."""
-        last_iteration = self.config.exp_repetitions + 1
-        self.config.simulator_hyper_params['n'] = list(
-            range(1, last_iteration))
+        iterations = range(1, self.config.exp_repetitions + 1)
+        self.config.simulator_hyper_params['n'] = list(iterations)
 
         params = self.config.simulator_hyper_params
         nested_loops_from_dict_of_lists(
@@ -81,13 +80,26 @@ class Runner(ABC, Generic[T]):
 
     def _simulator(self, params: dict[str, np.float64]) -> np.float64:
         """Runs the simulator and monitor for a single parameter combination."""
-        logger.info(f"Running simulator with params: {params}")
-        robustness = self.single_run(params)
-        logger.info(f"Robustness: {robustness}")
+        if self.store[LineKey.falsified] != "yes":
+            logger.info(f"Running simulator with params: {params}")
+            self._increment_simulation()
+            robustness = self.single_run(params)
+            logger.info(f"Robustness: {robustness}")
+            self._store_robustness(robustness)
+            return robustness
+        else:
+            return self.store[LineKey.robustness]  # type: ignore
 
+    def _store_robustness(self, robustness: np.float64) -> None:
         self.store.store(LineKey.robustness, robustness)
         if robustness < 0:
             self.store.store(LineKey.falsified, "yes")
         else:
             self.store.store(LineKey.falsified, "no")
-        return robustness
+
+    def _increment_simulation(self) -> None:
+        if self.store[LineKey.simulations] is None:
+            self.store.store(LineKey.simulations, 1)
+        else:
+            self.store.store(LineKey.simulations,
+                             self.store[LineKey.simulations] + 1)  # type: ignore

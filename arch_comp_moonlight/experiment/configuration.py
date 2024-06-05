@@ -16,7 +16,7 @@ class Configuration:
     -   optimization_upper_bounds: the upper bounds for the optimization. They must be as many as the parameters of the model
     -   other_params: a dictionary with the parameters to optimize
     -   formula_name: the name of the formula to monitor
-    -   simulator_repetitions: the number of repetitions for each simulation
+    -   simulator_repetitions: the number of repetitions for each simulation (only relevant for stochastic simulations)
     """
     exp_name: str
     exp_batch_name: str
