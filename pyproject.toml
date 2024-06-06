@@ -22,6 +22,7 @@ pytest-watch = "^4.2.0"
 pyright = "^1.1.361"
 pytest-cov = "^5.0.0"
 pandas-stubs = "^2.2.2.240603"
+git-changelog = "^2.5.2"
 
 [tool.poetry.scripts]
 experiments = "experiments.main:main"
@@ -29,6 +30,23 @@ experiments = "experiments.main:main"
 [tool.pyright]
 enableTypeIgnoreComments = true
 strict = ["."]
+
+[tool.git-changelog]
+bump = "patch"
+convention = "angular"
+in-place = false
+marker-line = "<!-- insertion marker -->"
+output = "CHANGELOG.md"
+parse-refs = false
+parse-trailers = false
+provider = "github"
+repository = "."
+sections = "feat,fix,perf,refactor,docs,style,chore,test"
+template = "keepachangelog"
+version-regex = "^## \\\\[(?P<version>v?[^\\\\]]+)"
+versioning = "semver"
+zerover = true
+
 
 [build-system]
 requires = ["poetry-core"]
