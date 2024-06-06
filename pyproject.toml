@@ -41,12 +41,11 @@ parse-refs = false
 parse-trailers = false
 provider = "github"
 repository = "."
-sections = "feat,fix,perf,refactor,docs,style,chore,test"
+sections = "feat,fix,perf,refactor,docs,style,test,chore"
 template = "keepachangelog"
-version-regex = "^## \\\\[(?P<version>v?[^\\\\]]+)"
+version-regex = "^## \\[(?P<version>v?[^\\]]+)"
 versioning = "semver"
 zerover = true
-
 
 [build-system]
 requires = ["poetry-core"]
