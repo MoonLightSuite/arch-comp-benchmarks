@@ -6,9 +6,9 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## [0.0.1](https://github.com/ennioVisco/arch-comp-moonlight/releases/tag/0.0.1) - 2024-06-06
+## [0.1.0](https://github.com/ennioVisco/arch-comp-moonlight/releases/tag/0.1.0) - 2024-06-06
 
-<small>[Compare with first commit](https://github.com/ennioVisco/arch-comp-moonlight/compare/09d6e7fe40cf8af5c68848d4a9fddead61050671...0.0.1)</small>
+<small>[Compare with first commit](https://github.com/ennioVisco/arch-comp-moonlight/compare/09d6e7fe40cf8af5c68848d4a9fddead61050671...0.1.0)</small>
 
 ### Features
 
@@ -45,6 +45,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 - moved to a main experiment runner ([6718f37](https://github.com/ennioVisco/arch-comp-moonlight/commit/6718f37a675234390e351ae72715e6784f12d3b0) by Ennio Visconti).
 - externalized experiments from core ([c826740](https://github.com/ennioVisco/arch-comp-moonlight/commit/c826740b3e29299ccf26180f520b1492f265db95) by Ennio Visconti).
+
+### Docs
+
+- added changelog ([09baf8a](https://github.com/ennioVisco/arch-comp-moonlight/commit/09baf8a26632be2afef7ad98ca8fc3dd265ed224) by Ennio Visconti).
 
 ### Chore
 

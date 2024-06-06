@@ -32,7 +32,7 @@ enableTypeIgnoreComments = true
 strict = ["."]
 
 [tool.git-changelog]
-bump = "patch"
+bump = "auto"
 convention = "angular"
 in-place = false
 marker-line = "<!-- insertion marker -->"
