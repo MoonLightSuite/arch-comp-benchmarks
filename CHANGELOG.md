@@ -6,9 +6,21 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
-## [0.1.0](https://github.com/ennioVisco/arch-comp-moonlight/releases/tag/0.1.0) - 2024-06-06
+## [v0.1.1](https://github.com/ennioVisco/arch-comp-moonlight/releases/tag/v0.1.1) - 2024-06-06
 
-<small>[Compare with first commit](https://github.com/ennioVisco/arch-comp-moonlight/compare/09d6e7fe40cf8af5c68848d4a9fddead61050671...0.1.0)</small>
+<small>[Compare with v0.1.0](https://github.com/ennioVisco/arch-comp-moonlight/compare/v0.1.0...v0.1.1)</small>
+
+### Bug Fixes
+
+- added missing token ([8f753c2](https://github.com/ennioVisco/arch-comp-moonlight/commit/8f753c2cf702f92f36fe27d94e60f7ef2a315a3a) by Ennio Visconti).
+
+### Chore
+
+- added manual triggering ([163627e](https://github.com/ennioVisco/arch-comp-moonlight/commit/163627e1ef08ad82ba9d397e71ae2748e39ac759) by Ennio Visconti).
+
+## [v0.1.0](https://github.com/ennioVisco/arch-comp-moonlight/releases/tag/v0.1.0) - 2024-06-06
+
+<small>[Compare with first commit](https://github.com/ennioVisco/arch-comp-moonlight/compare/09d6e7fe40cf8af5c68848d4a9fddead61050671...v0.1.0)</small>
 
 ### Features
 
@@ -26,6 +38,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ### Bug Fixes
 
+- changelog generation ([fa90e80](https://github.com/ennioVisco/arch-comp-moonlight/commit/fa90e80cdea0e21c0b88af34a2ea78a0ad8dc107) by Ennio Visconti).
 - number of simulations to falsify ([4a68ff9](https://github.com/ennioVisco/arch-comp-moonlight/commit/4a68ff9e665ec524795b05b4cd833926abf8eb09) by Ennio Visconti).
 - fixed pm experiment ([a5851ad](https://github.com/ennioVisco/arch-comp-moonlight/commit/a5851ad5d37be8ceaae6bbab39dc6055c00fa380) by Ennio Visconti).
 - minor changes to generalize experiments ([526ccca](https://github.com/ennioVisco/arch-comp-moonlight/commit/526ccca758f1b7741ffbbabaf5966dc66b829c25) by Ennio Visconti).

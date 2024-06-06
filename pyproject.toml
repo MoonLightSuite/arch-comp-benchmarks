@@ -34,7 +34,7 @@ strict = ["."]
 [tool.git-changelog]
 bump = "auto"
 convention = "angular"
-in-place = false
+in-place = true
 marker-line = "<!-- insertion marker -->"
 output = "CHANGELOG.md"
 parse-refs = false
