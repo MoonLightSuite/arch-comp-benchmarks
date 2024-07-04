@@ -1,12 +1,14 @@
 
 from abc import ABC, abstractmethod
-from typing import TypeVar, Generic
+from typing import TypeVar, Generic, cast
 
 from arch_comp_moonlight.experiment.configuration import Configuration
 from arch_comp_moonlight.experiment.store import LineKey, Store
 
 from ..experiment.trace import Trace
 import numpy as np
+import time
+
 
 T = TypeVar("T")
 
@@ -31,8 +33,24 @@ class Simulator(ABC, Generic[T]):
         self.config = config
         store.store(LineKey.property, config.monitor_formula_name)
 
-    @abstractmethod
     def run(self, params: dict[str, np.float64]) -> Trace[T]:
+        """Runs an instance of the simulation and keeps track of the time."""
+        start = time.time()
+        result = self.raw_run(params)
+        end = time.time()
+        currentTime = np.float64(end - start)
+
+        # print(f"Simulation time is: {self.store[LineKey.simulation_time]}")
+        if (self.store[LineKey.simulation_time]):
+            previousTime = cast(
+                np.float64, self.store[LineKey.simulation_time])
+            currentTime += previousTime
+
+        self.store.store(LineKey.simulation_time, currentTime)
+        return result
+
+    @abstractmethod
+    def raw_run(self, params: dict[str, np.float64]) -> Trace[T]:
         """Runs an instance of the simulation."""
         raise NotImplementedError()
 

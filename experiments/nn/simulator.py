@@ -2,7 +2,7 @@
 from arch_comp_moonlight.experiment.configuration import Configuration
 from arch_comp_moonlight.experiment.store import LineKey, Store
 from arch_comp_moonlight.experiment.trace import Trace
-from arch_comp_moonlight.utils import unpack
+from arch_comp_moonlight.utils import unpack, list_of_lists_to_matlab_matrix
 from arch_comp_moonlight.matlab import Matlab
 from arch_comp_moonlight.baseline.simulator import Simulator
 import os
@@ -26,7 +26,7 @@ class NNSimulator(Simulator[TraceValue]):
         self.matlab.eval(f"addpath('{config.simulator_model_path}');")
         self._init()
 
-    def run(self, params: dict[str, np.float64]) -> Trace[TraceValue]:
+    def raw_run(self, params: dict[str, np.float64]) -> Trace[TraceValue]:
         self._pass_input(params)
         self.matlab.eval("[tout, yout, xin] = run_neural(u, T);")
         return self._prepare_output()
@@ -53,7 +53,7 @@ class NNSimulator(Simulator[TraceValue]):
         [error, pos] = np.asarray(yout).transpose().tolist()
         values: list[tuple[Any, Any]] = list(zip(error, pos))
 
-        self.store.store(LineKey.time, times[-1])
-        self.store.store(LineKey.input, f"{u}")
+        self.store.store(LineKey.stop_time, times[-1])
+        self.store.store(LineKey.input, f"{list_of_lists_to_matlab_matrix(u)}")
 
         return {'times': times, 'values': values}

@@ -10,6 +10,7 @@ import logging
 from .store import LineKey, Store
 import numpy as np
 from definitions import ROOT_DIR
+import time
 
 logger = logging.getLogger(__name__)
 
@@ -74,8 +75,11 @@ class Runner(ABC, Generic[T]):
         filename = self._compute_output_file(iteration)
         logger.info(f"Repetition n.: {iteration['n']}")
         logger.info(f"Iteration params: {iteration}")
+        start = time.time()
         self.prepare_optimizer(iteration)
         self.optimizer.optimize(self._simulator)
+        end = time.time()
+        self.store.store(LineKey.total_time, np.float64(end - start))
         self.store.save(filename)
 
     def _simulator(self, params: dict[str, np.float64]) -> np.float64:

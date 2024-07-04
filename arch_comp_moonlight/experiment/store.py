@@ -8,14 +8,16 @@ from functools import total_ordering
 
 @total_ordering
 class LineKey(Enum):
+    instance = auto()
     system = auto()
     property = auto()
     simulations = auto()
-    time = auto()
+    stop_time = auto()
     robustness = auto()
     falsified = auto()
+    simulation_time = auto()
+    total_time = auto()
     input = auto()
-    instance = auto()
 
     def __lt__(self, other: Self) -> bool:
         if self.__class__ is other.__class__:

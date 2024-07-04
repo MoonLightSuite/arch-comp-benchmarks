@@ -1,6 +1,8 @@
 from typing import Callable, Any, Mapping, TypeVar
 from itertools import product
 import logging
+import zlib
+import base64
 
 from arch_comp_moonlight.experiment.iteration import Iteration
 
@@ -57,3 +59,29 @@ def unpack(params: dict[Any, Any]) -> str:
     e.g. {'u1': 1, 'u2': 2, 'u3': 2} -> '[1; 2; 2]'
     """
     return f"[ {'; '.join([str(params[key]) for key in params.keys()])} ]"
+
+
+def compress_string(input_string: str):
+    """
+    Compress a string using zlib and encode it with Base64
+    """
+    compressed_data = zlib.compress(input_string.encode('utf-8'))
+    compressed_string = base64.b64encode(compressed_data).decode('utf-8')
+    return compressed_string
+
+
+def decompress_string(compressed_string: str):
+    """
+    Decode a compressed string using Base64 and decompress it using zlib
+    """
+    compressed_data = base64.b64decode(compressed_string)
+    decompressed_data = zlib.decompress(compressed_data)
+    return decompressed_data.decode('utf-8')
+
+
+def list_of_lists_to_matlab_matrix(matrix: list[list[Any]]) -> str:
+    """
+    Given a list of lists, we convert it to a string that represents a matrix in MATLAB
+    e.g. [[1, 2, 3], [4, 5, 6]] -> '[1 2 3; 4 5 6]'
+    """
+    return '[' + '; '.join([' '.join(map(str, row)) for row in matrix]) + ']'

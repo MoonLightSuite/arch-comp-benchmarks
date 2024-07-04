@@ -134,22 +134,23 @@ pm_config_2 = Configuration(
 
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
-    for i in range(10):
-        logger.info(f"Experiment repetitions {i+1}/10")
-        # nn1 = NNRunner(nn_config_1)
-        # nn1.run_batch()
-        # nn2 = NNRunner(nn_config_2)
-        # nn2.run_batch()
-        # nnx1 = NNRunner(nnx_config_1)
-        # nnx1.run_batch()
-        # nnx2 = NNRunner(nnx_config_2)
-        # nnx2.run_batch()
+    total = 1
+    for i in range(total):
+        logger.info(f"Experiment repetitions {i+1}/{total}")
+        nn1 = NNRunner(nn_config_1)
+        nn1.run_batch()
+        nn2 = NNRunner(nn_config_2)
+        nn2.run_batch()
+        nnx1 = NNRunner(nnx_config_1)
+        nnx1.run_batch()
+        nnx2 = NNRunner(nnx_config_2)
+        nnx2.run_batch()
         f16 = F16Runner(f16_config)
         f16.run_batch()
-        # pm1 = PMRunner(pm_config_1)
-        # pm1.run_batch()
-        # pm2 = PMRunner(pm_config_2)
-        # pm2.run_batch()
+        pm1 = PMRunner(pm_config_1)
+        pm1.run_batch()
+        pm2 = PMRunner(pm_config_2)
+        pm2.run_batch()
 
 
 if __name__ == "__main__":
