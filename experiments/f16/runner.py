@@ -32,6 +32,7 @@ class F16Runner(Runner[Params]):
     def single_run(self, params: dict[str, np.float64]) -> np.float64:
         trace: Trace[TraceValue] = self.simulator.run(params)
         robustness = self.monitor.run(trace, self.config.monitor_formula_name)
+        logger.info(f"Robustness: {robustness}")
         value = robustness.transpose()[1][0]
         return value
 

@@ -18,10 +18,9 @@ nn_config_1 = Configuration(
     exp_name="NN",
     exp_batch_name="TURBO",
     exp_instance_number=1,
-    exp_repetitions=10,
-    optimization_iterations=28,
+    exp_repetitions=1,
+    optimization_iterations=300,
     simulator_model_path=f"{EXP_DIR}/NN - Magnet",
-    simulator_repetitions=1,
     # Experiment-specific
     monitor_spec=f"{dir}/nn/spec_nn.mls",
     monitor_formula_name="NN",
@@ -36,10 +35,9 @@ nnx_config_1 = Configuration(
     exp_name="NN",
     exp_batch_name="TURBO",
     exp_instance_number=1,
-    exp_repetitions=10,
-    optimization_iterations=72,
+    exp_repetitions=1,
+    optimization_iterations=300,
     simulator_model_path=f"{EXP_DIR}/NN - Magnet",
-    simulator_repetitions=1,
     # Experiment-specific
     monitor_spec=f"{dir}/nn/spec_nnx.mls",
     monitor_formula_name="NNx",
@@ -54,10 +52,9 @@ nn_config_2 = Configuration(
     exp_name="NN",
     exp_batch_name="TURBO",
     exp_instance_number=2,
-    exp_repetitions=10,
-    optimization_iterations=10,
+    exp_repetitions=1,
+    optimization_iterations=300,
     simulator_model_path=f"{EXP_DIR}/NN - Magnet",
-    simulator_repetitions=1,
     # Experiment-specific
     monitor_spec=f"{dir}/nn/spec_nn.mls",
     monitor_formula_name="NN",
@@ -72,10 +69,9 @@ nnx_config_2 = Configuration(
     exp_name="NN",
     exp_batch_name="TURBO",
     exp_instance_number=2,
-    exp_repetitions=10,
-    optimization_iterations=10,
+    exp_repetitions=1,
+    optimization_iterations=300,
     simulator_model_path=f"{EXP_DIR}/NN - Magnet",
-    simulator_repetitions=1,
     # Experiment-specific
     monitor_spec=f"{dir}/nn/spec_nnx.mls",
     monitor_formula_name="NNx",
@@ -90,10 +86,9 @@ f16_config = Configuration(
     exp_name="F16",
     exp_batch_name="TURBO",
     exp_instance_number=1,
-    exp_repetitions=10,
-    optimization_iterations=10,
+    exp_repetitions=1,
+    optimization_iterations=30,
     simulator_model_path=f"{EXP_DIR}/F16",
-    simulator_repetitions=1,
     # Experiment-specific
     monitor_spec=f"{dir}/f16/spec.mls",
     monitor_formula_name="F16",
@@ -106,10 +101,9 @@ pm_config_1 = Configuration(
     exp_name="PM",
     exp_batch_name="TURBO",
     exp_instance_number=1,
-    exp_repetitions=10,
-    optimization_iterations=22,
+    exp_repetitions=1,
+    optimization_iterations=300,
     simulator_model_path=f"{EXP_DIR}/PM - Pacemaker",
-    simulator_repetitions=1,
     # Experiment-specific
     monitor_spec=f"{dir}/pm/spec.mls",
     monitor_formula_name="PM",
@@ -125,9 +119,8 @@ pm_config_2 = Configuration(
     exp_batch_name="TURBO",
     exp_instance_number=2,
     exp_repetitions=1,
-    optimization_iterations=15,
+    optimization_iterations=300,
     simulator_model_path=f"{EXP_DIR}/PM - Pacemaker",
-    simulator_repetitions=1,
     # Experiment-specific
     monitor_spec=f"{dir}/pm/spec.mls",
     monitor_formula_name="PM",
@@ -141,12 +134,22 @@ pm_config_2 = Configuration(
 
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
-    nn = NNRunner(nn_config_2)
-    nn.run_batch()
-    f16 = F16Runner(f16_config)
-    f16.run_batch()
-    pm = PMRunner(pm_config_1)
-    pm.run_batch()
+    for i in range(10):
+        logger.info(f"Experiment repetitions {i+1}/10")
+        # nn1 = NNRunner(nn_config_1)
+        # nn1.run_batch()
+        # nn2 = NNRunner(nn_config_2)
+        # nn2.run_batch()
+        # nnx1 = NNRunner(nnx_config_1)
+        # nnx1.run_batch()
+        # nnx2 = NNRunner(nnx_config_2)
+        # nnx2.run_batch()
+        f16 = F16Runner(f16_config)
+        f16.run_batch()
+        # pm1 = PMRunner(pm_config_1)
+        # pm1.run_batch()
+        # pm2 = PMRunner(pm_config_2)
+        # pm2.run_batch()
 
 
 if __name__ == "__main__":
