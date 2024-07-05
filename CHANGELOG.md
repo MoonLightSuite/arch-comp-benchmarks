@@ -6,6 +6,23 @@ The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
 <!-- insertion marker -->
+## [v0.2.0](https://github.com/MoonLightSuite/arch-comp-benchmarks/releases/tag/v0.2.0) - 2024-07-05
+
+<small>[Compare with v0.1.1](https://github.com/MoonLightSuite/arch-comp-benchmarks/compare/v0.1.1...v0.2.0)</small>
+
+### Features
+
+- added `simulation_time` and `total_time` in output + minor fixes ([27be4ab](https://github.com/MoonLightSuite/arch-comp-benchmarks/commit/27be4ab31fe49b358287af7f66e8d0e6f2b842d4) by Ennio Visconti).
+
+### Bug Fixes
+
+- fixed F16 falsification and added paper output generetion ([302a6cd](https://github.com/MoonLightSuite/arch-comp-benchmarks/commit/302a6cd49088708f290e9d87999ecc14cc1b45cf) by Ennio Visconti).
+
+### Chore
+
+- final results ([01f0c41](https://github.com/MoonLightSuite/arch-comp-benchmarks/commit/01f0c41ef280b6fe3f01e617c5f9917b1333cc8b) by Ennio Visconti).
+- minor release cleanup ([d71a591](https://github.com/MoonLightSuite/arch-comp-benchmarks/commit/d71a5918a24197631c1ba1babdb645404dbbaedf) by Ennio Visconti).
+
 ## [v0.1.1](https://github.com/ennioVisco/arch-comp-moonlight/releases/tag/v0.1.1) - 2024-06-06
 
 <small>[Compare with v0.1.0](https://github.com/ennioVisco/arch-comp-moonlight/compare/v0.1.0...v0.1.1)</small>
@@ -74,4 +91,3 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - removed Mac files ([2fd4907](https://github.com/ennioVisco/arch-comp-moonlight/commit/2fd4907cdeda8c8a247a6fcb3c660cb3c55eb263) by Ennio Visconti).
 - tdd init ([670e241](https://github.com/ennioVisco/arch-comp-moonlight/commit/670e2414a4a66acb0db669d30ec0d3844646d960) by Ennio Visconti).
 - project init ([ae1a9fd](https://github.com/ennioVisco/arch-comp-moonlight/commit/ae1a9fda3ae0d0522ef549e87098e1ad9d6e6a90) by Ennio Visconti).
-
