@@ -30,9 +30,14 @@ class F16Runner(Runner[Params]):
         self.monitor = Moonlight[TraceValue](spec=config.monitor_spec)
 
     def single_run(self, params: dict[str, np.float64]) -> np.float64:
-        trace: Trace[TraceValue] = self.simulator.run(params)
-        robustness = self.monitor.run(trace, self.config.monitor_formula_name)
-        value = robustness.transpose()[1][0]
+        try:
+            trace: Trace[TraceValue] = self.simulator.run(params)
+            robustness = self.monitor.run(
+                trace, self.config.monitor_formula_name)
+            value = robustness.transpose()[1][0]
+        except Exception:
+            logger.error(f"Plane crashed!")
+            value = np.float64(-1)
         return value
 
     def prepare_optimizer(self, iteration: Iteration[Params]) -> None:

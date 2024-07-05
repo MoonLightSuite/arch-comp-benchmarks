@@ -3,6 +3,8 @@ from itertools import product
 import logging
 import zlib
 import base64
+from glob import glob
+from pandas import DataFrame, read_csv, concat
 
 from arch_comp_moonlight.experiment.iteration import Iteration
 
@@ -85,3 +87,27 @@ def list_of_lists_to_matlab_matrix(matrix: list[list[Any]]) -> str:
     e.g. [[1, 2, 3], [4, 5, 6]] -> '[1 2 3; 4 5 6]'
     """
     return '[' + '; '.join([' '.join(map(str, row)) for row in matrix]) + ']'
+
+
+def merge_results(path: str, to_file: str | None = None) -> DataFrame:
+    """
+    Merge all the CSV files in the provided directory and its subdirectories into a single CSV file, and optionally saves it.
+    """
+
+    dfs: list[DataFrame] = []
+
+    # Get a list of all CSV files in the output directory and its subdirectories
+    csv_files = glob(path, recursive=True)
+
+    # Loop through the list of CSV files
+    for csv_file in csv_files:
+        logger.info(f'Reading {csv_file}')
+        dfs.append(read_csv(csv_file, sep=',', quotechar='"',  # type: ignore
+                            skipinitialspace=True))
+
+    merged_df: DataFrame = concat(dfs, ignore_index=True)  # type: ignore
+
+    if (to_file):
+        merged_df.to_csv(to_file, index=False)  # type: ignore
+
+    return merged_df  # type: ignore
