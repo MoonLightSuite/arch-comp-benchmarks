@@ -87,7 +87,7 @@ f16_config = Configuration(
     exp_batch_name="TURBO",
     exp_instance_number=1,
     exp_repetitions=1,
-    optimization_iterations=30,
+    optimization_iterations=300,
     simulator_model_path=f"{EXP_DIR}/F16",
     # Experiment-specific
     monitor_spec=f"{dir}/f16/spec.mls",
@@ -134,7 +134,8 @@ pm_config_2 = Configuration(
 
 def main():
     os.system('cls' if os.name == 'nt' else 'clear')
-    total = 1
+    # Note, there is a bug with Turbo that makes it hard to reset it completely after a run, so I'm re-instantiating the Runner each time to temporarily avoid the issue!
+    total = 10
     for i in range(total):
         logger.info(f"Experiment repetitions {i+1}/{total}")
         nn1 = NNRunner(nn_config_1)
